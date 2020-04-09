@@ -18,14 +18,15 @@ namespace Advent
 
 			AObject Clothes = new AObject(
 				"衣服", new[] { "衣物", "服装" },
-				desc:	"杂乱堆着的衣服；在顶上有几件外套和外裤。",
-				ldesc:	"杂乱堆着的衣服；在顶上有几件外套和外裤。",
+				desc: 	"杂乱堆着的衣服；在顶上有几件外套和外裤。",
+				ldesc: 	"杂乱堆着的衣服；在顶上有几件外套和外裤。",
 				info:	"打开的衣柜里能看见你杂乱堆放着的衣服。");
 
 			AObject Closet = new AObject(
 				"衣柜", new[] { "柜子", "橱柜", "柜门" },
-				desc:	"普通的寝室衣柜，没有上锁。")
-			{ IsOpenable = true,
+				desc: 	"普通的寝室衣柜，没有上锁。")
+			{
+				IsOpenable = true,
 				OnOpening = (self, v) =>
 				{
 					self.OpenState = true;
@@ -37,21 +38,23 @@ namespace Advent
 				{
 					v.currentRoom.Objects.Remove(Clothes);
 					return HandleResult.Continue;
-				} };
+				}
+			};
 
 			AObject Bottle = new AObject(
 				"水杯", new[] { "水瓶", "杯子", "瓶子", "保温杯" },
-				desc:	"它的金属表面握起来凉凉的，晃一晃能感觉到里面还有一半水。",
-				ldesc:	"它银色的金属表面光滑发亮，晃一晃能感觉到里面还有一半水。",
+				desc: 	"它的金属表面握起来凉凉的，晃一晃能感觉到里面还有一半水。",
+				ldesc: 	"它银色的金属表面光滑发亮，晃一晃能感觉到里面还有一半水。",
 				info:	"你的一个水杯放在这里。")
 			{ IsTakable = true };
 
 			AObject Flashlight = new AObject(
 				"手电筒", new[] { "手电", "电筒" },
-				desc:	"简单的手电筒，然而设计得十分周到，在黑暗中还会发出一小圈荧光。",
-				ldesc:	"一个闪亮的银色金属手电筒。这花了你不少钱，但是挺漂亮，照明范围也大。",
-				info:	"你的一个小手电筒放在这里。") 
-			{ IsTakable = true, IsSwitch = true,
+				desc: 	"简单的手电筒，然而设计得十分周到，在黑暗中还会发出一小圈荧光。",
+				ldesc: 	"一个闪亮的银色金属手电筒。这花了你不少钱，但是挺漂亮，照明范围也大。",
+				info:	"你的一个小手电筒放在这里。")
+			{
+				IsTakable = true, IsSwitch = true,
 				OnTurningOn = (self, v) =>
 				{
 					if (!v.inventory.Contains(self))
@@ -88,27 +91,31 @@ namespace Advent
 						Print("咔哒。\n\n");
 						return HandleResult.FullManaged;
 					}
-				} };
+				}
+			};
 
 			AObject ACControl = new AObject(
 				"空调遥控器", new[] { "遥控器" },
-				desc:	"一团方块形状的空调遥控器，按键在黑暗中微弱地发光。",
-				ldesc:	"方块形状的白色空调遥控器，侧面带着红色条纹。",
+				desc: 	"一团方块形状的空调遥控器，按键在黑暗中微弱地发光。",
+				ldesc: 	"方块形状的白色空调遥控器，侧面带着红色条纹。",
 				info:	"一个空调遥控器放在这里。")
 			{ IsTakable = true };
 
 			AObject Desk = new AObject(
 				"桌子", new[] { "课桌", "桌椅" },
-				desc:	"看上去漆黑一片，但是你知道自己的位置上有盏台灯，上面的格子里堆放着杂物。",
-				ldesc:	"普通的桌子，从寝室一边的衣柜延伸到洗手间过道的门边。上面的格子里堆放着杂物。") 
-			{ IsContainer = true,
-				SubObjects = new List<AObject> { Bottle, Flashlight, ACControl } };
+				desc: 	"看上去漆黑一片，但是你知道自己的位置上有盏台灯，上面的格子里堆放着杂物。",
+				ldesc: 	"普通的桌子，从寝室一边的衣柜延伸到洗手间过道的门边。上面的格子里堆放着杂物。")
+			{
+				IsContainer = true,
+				SubObjects = new List<AObject> { Bottle, Flashlight, ACControl }
+			};
 
 			AObject Lamp = new AObject(
 				"台灯", new[] { "灯" },
-				desc:	"虽然看不清楚，但是你至少知道开关在哪里。",
-				ldesc:	"廉价的白色塑料台灯。如果能开，应该会挺亮的。") 
-			{ IsSwitch = true,
+				desc: 	"虽然看不清楚，但是你至少知道开关在哪里。",
+				ldesc: 	"廉价的白色塑料台灯。如果能开，应该会挺亮的。")
+			{
+				IsSwitch = true,
 				OnTurningOn = (self, v) =>
 				{
 					if (!v.foundLampUnlit)
@@ -118,14 +125,16 @@ namespace Advent
 					} else
 						Print("咔哒。没有反应。\n\n");
 					return HandleResult.Refused;
-				} };
+				}
+			};
 
 			AObject Beds = new AObject(
 				"床铺", new[] { "床", "床位", "被子" },
-				desc:	"看上去只是漆黑一片。",
-				ldesc:	"床铺里面全都空无一人，被子随意铺开，就好像睡觉的人凭空消失了一样。床架、栏杆都非常完整，没有其他的痕迹。") 
-			{ IsContainer = true,
-				OnExaminaion = (self, v) => 
+				desc: 	"看上去只是漆黑一片。",
+				ldesc: 	"床铺里面全都空无一人，被子随意铺开，就好像睡觉的人凭空消失了一样。床架、栏杆都非常完整，没有其他的痕迹。")
+			{
+				IsContainer = true,
+				OnExaminaion = (self, v) =>
 				{
 					if (!v.foundNobody && (v.currentRoom.IsPlayerLit || v.currentRoom.IsLit))
 					{
@@ -135,13 +144,15 @@ namespace Advent
 						v.foundNobody = true;
 					}
 					return HandleResult.Continue;
-				} };
-			
+				}
+			};
+
 			AObject AirConditioner = new AObject(
 				"空调", new string[0],
 				desc:	"空调制热模式低沉的呼吸声中，两个绿点随着在黑暗的高处闪光。", // can change
 				ldesc:	"普通而标准的寝室空调，发出制热模式低沉的呼吸声。两个绿点微弱地在面板上亮着。")
-			{ IsSwitch = true, SwitchState = true, 
+			{
+				IsSwitch = true, SwitchState = true,
 				OnTurningOn = (self, v) =>
 				{
 					if (!v.inventory.Contains(ACControl))
@@ -149,9 +160,9 @@ namespace Advent
 						Print("你没有拿遥控器。\n\n");
 						return HandleResult.Refused;
 					}
-					self.Description = (_s, _v) => 
+					self.Description = (_s, _v) =>
 						"空调制热模式低沉的呼吸声中，两个绿点随着在黑暗的高处闪光。";
-					self.LightDescription = (_s, _v) => 
+					self.LightDescription = (_s, _v) =>
 						"普通而标准的寝室空调，发出制热模式低沉的呼吸声。两个绿点微弱地在面板上亮着。";
 					Print("滴。导流板转动的僵硬声音。\n\n");
 					self.SwitchState = true;
@@ -164,30 +175,32 @@ namespace Advent
 						Print("你没有拿遥控器。\n\n");
 						return HandleResult.Refused;
 					}
-					self.Description = (_s, _v) => 
+					self.Description = (_s, _v) =>
 						"看上去只是漆黑一片。";
-					self.LightDescription = (_s, _v) => 
+					self.LightDescription = (_s, _v) =>
 						"普通而标准的寝室空调，毫无活力。";
 					Print("滴。导流板转动的僵硬声音。\n\n");
 					self.SwitchState = false;
 					return HandleResult.FullManaged;
-				} };
+				}
+			};
 
 			AObject Window = new AObject(
 				"窗户", new[] { "窗", "玻璃", "窗外", "天空", "外面" },
-				desc:	"窗户被窗帘遮挡着，透出微弱的一点光。",
-				ldesc:	"窗帘没有拉开，你看不见外面的样子。");
+				desc: 	"窗户被窗帘遮挡着，透出微弱的一点光。",
+				ldesc: 	"窗帘没有拉开，你看不见外面的样子。");
 
 			AObject Darkness = new AObject(
 				"黑暗", new[] { "窗外", "外面" },
-				desc:	"在黑暗中看着黑暗是一种怪异的体验。事实上它并不全是黑暗：它其实在发光，室内窗帘后的微光便是它发出的。看着它使你感到头晕。",
-				ldesc:	"不像是雾，手电筒照不穿它。你只能形容它为“黑暗”：事实上它在发光，室内窗帘后的微光便是它发出的。但你看着它的时候你完全确定它就是一片黑暗，深不可测，使你头晕。");
+				desc: 	"在黑暗中看着黑暗是一种怪异的体验。事实上它并不全是黑暗：它其实在发光，室内窗帘后的微光便是它发出的。看着它使你感到头晕。",
+				ldesc: 	"不像是雾，手电筒照不穿它。你只能形容它为“黑暗”：事实上它在发光，室内窗帘后的微光便是它发出的。但你看着它的时候你完全确定它就是一片黑暗，深不可测，使你头晕。");
 
 			AObject Curtain = new AObject(
 				"窗帘", new[] { "帘子" },
-				desc:	"从窗帘后面什么地方透出微弱的一点光来。",
-				ldesc:	"浅黄的窗帘在灯光下显得苍白，遮蔽了窗外的一点点亮光。") // WILL CHANGE
-			{ IsOpenable = true, OpenState = false,
+				desc: 	"从窗帘后面什么地方透出微弱的一点光来。",
+				ldesc: 	"浅黄的窗帘在灯光下显得苍白，遮蔽了窗外的一点点亮光。") // WILL CHANGE
+			{
+				IsOpenable = true, OpenState = false,
 				OnOpening = (self, v) =>
 				{
 					self.OpenState = true;
@@ -215,31 +228,32 @@ namespace Advent
 
 					Print("你拉上窗帘。\n\n");
 					return HandleResult.FullManaged;
-				} };
+				}
+			};
 
 			Flashlight.Parent = Desk;
 			Bottle.Parent = Desk;
 			ACControl.Parent = Desk;
 
 			AObject RestroomDoor = AObject.SimpleDoor(
-				Restroom, "去洗手间过道的门", 
-				new[] { "厕所门", "洗手间门", "厕所", "洗手间", "门" }, 
-				desc:	"通往洗手间过道的门。",
+				Restroom, "去洗手间过道的门",
+				new[] { "厕所门", "洗手间门", "厕所", "洗手间", "门" },
+				desc: 	"通往洗手间过道的门。",
 				flopside: () => Restroom.FindObjectInternal("去寝室的门"));
 
 			AObject HallwayDoor = AObject.SimpleDoor(
-				DormsHallway, "去走廊的门", 
+				DormsHallway, "去走廊的门",
 				new[] { "走廊门", "走廊", "门" },
-				desc: "通往寝室楼走廊的门。",
+				desc: 	"通往寝室楼走廊的门。",
 				flopside: () => DormsHallway.FindObjectInternal("12#寝室的门"));
 
 			Dormitory12.Objects.Clear();
-			Dormitory12.Objects.AddRange(new[] { 
+			Dormitory12.Objects.AddRange(new[] {
 				Closet, Desk, Lamp, Beds, Window, Curtain, AirConditioner, RestroomDoor, HallwayDoor });
 			Dormitory12.DefaultDoor = HallwayDoor;
-			
+
 			Dormitory12.Objects.Add(new AObject("椅子", new[]
-				{ "物品", "杂物", "枕头", "床单", "被子", "天花板", "东西", "床架", "栏杆", 
+				{ "物品", "杂物", "枕头", "床单", "被子", "天花板", "东西", "床架", "栏杆",
 				"墙壁", "墙", "地面", "地板", "地" }));
 
 			Area BedArea = new Area("床上")
@@ -275,7 +289,7 @@ namespace Advent
 				} else
 					return HandleResult.Continue;
 			};
-			
+
 			int acCounter = -1;
 			Dormitory12.PostCommand = (self, v, p) =>
 			{

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using static Advent.Interactive;
 
 namespace Advent
 {
-	class PlayerVariables
+	public class PlayerVariables
 	{
 		// common variables shared in game
 
@@ -18,23 +18,30 @@ namespace Advent
 		public int temperature = 0;
 		public bool withClothes = false;
 
-		// night 1
+		// night-related
 
-		public bool gotUp1 = false;				// have we gotten up at the first night?
-		public bool flashlightOK = false;		// have we played with the flashlight to get it working?
-		public bool firstLight = false;			// have we seen the flashlight work for the first time?
-		public bool foundLampUnlit = false;		// have we found lamp has no use?
-		public bool foundNobody = false;		// have we discovered that nobody else is here?
-		public bool foundWatchStop = false;		// have we found our watch has stopped?
-		public bool foundDarkness1 = false;		// have we found the darkness?
-		public bool foundDoorsLocked = false;	// have we discovered other dorms are locked? 
+		public bool gotUp1 = false;             // have we gotten up at the first night?
+		public bool foundDarkness1 = false;     // have we found the darkness?
+		public bool foundNoVoid2 = false;       // have we found there is no longer darkness around us?
 
-		// night 2
+		// equipments
 
-		public bool foundNoVoid2 = false;		// have we found there is no longer darkness around us?
-		public bool foundVoidGate = false;		// have we discovered the darkness outside the gates?
-		public bool foundClassroom = false;		// have we found the lighted classroom?
-		public bool foundTimeStop = false;		// have we found every clock has stopped?
+		public bool flashlightOK = false;       // have we played with the flashlight to get it working?
+		public bool firstLight = false;         // have we seen the flashlight work for the first time?
+
+		// personal experiences
+
+		public bool foundLampUnlit = false;     // have we found lamp has no use?
+		public bool foundNobody = false;        // have we discovered that nobody else is here?
+		public bool foundWatchStop = false;     // have we found our watch has stopped?
+		public bool foundDoorsLocked = false;   // have we discovered other dorms are locked? 
+		public bool foundTimeStop = false;      // have we found every clock has stopped?
+
+		// map-related experiences
+
+		public bool foundVoidGate = false;      // have we discovered the darkness outside the gates?
+		public bool foundClassroom = false;     // have we found the lighted classroom?
+		public bool triedGetFish = false;		// have we attempted to get fish from the ponds?
 
 		// each night
 
@@ -61,8 +68,8 @@ namespace Advent
 
 		public AObject Watch = new AObject(
 			"手表", new[] { "表", "时间" },
-			desc:		"手表的荧光指针显示着1:12。",
-			ldesc:		"手表指着1:12:37，秒针一动不动。")
+			desc: "手表的荧光指针显示着1:12。",
+			ldesc: "手表指着1:12:37，秒针一动不动。")
 		{
 			OnExaminaion = (self, v) =>
 			{
@@ -73,7 +80,8 @@ namespace Advent
 					return HandleResult.FullManaged;
 				}
 				return HandleResult.Continue;
-			} };
+			}
+		};
 
 		public PlayerVariables(Player p)
 		{

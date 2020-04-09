@@ -1,19 +1,17 @@
 ﻿using System;
-using static System.Console;
-using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using static System.Console;
 
 namespace Advent
 {
 	// A software-implemented screen buffer with a header support. When porting to other platforms hopefully this might be the only thing that gets rewritten...
 	public static class Interactive
 	{
+		private static readonly string[] buf;
+		private static readonly string padding = "";
 		private static string header = "";
-		private static string[] buf;
 		private static int curX = 0;
-		private static string padding = "";
 		public static bool UnixColoring = true;
 
 		static Interactive()
@@ -24,7 +22,7 @@ namespace Advent
 			for (int i = 0; i < WindowWidth / 20; i++)
 				padding += " ";
 		}
-		
+
 		// Puts the software buffer on the screen after clearing.
 		public static void Flush()
 		{
@@ -48,7 +46,7 @@ namespace Advent
 				else textlen += 1;
 			return textlen;
 		}
-		
+
 		// Set the header with the text in the center. Doesn't flush immediately.
 		public static void SetHeader(string text)
 		{
@@ -99,7 +97,7 @@ namespace Advent
 			}
 			//Print("\n");
 		}
-		
+
 		// Prints something to the software buffer. Doesn't flush immediately.
 		public static void Print(string text)
 		{
@@ -120,7 +118,7 @@ namespace Advent
 				if (c == '\r') continue;
 				if (c == '\n') { temp.Add(""); pos = 0; continue; }
 
-				// is it out of range?
+				// is it out of screen?
 				pos++; if (c > 127) pos++;
 				if (pos > WindowWidth - padding.Length * 2) { pos = 1; temp.Add(""); }
 

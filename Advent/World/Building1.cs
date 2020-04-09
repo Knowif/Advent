@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Advent
 {
@@ -20,19 +17,19 @@ namespace Advent
 				Area Study = new Area();
 				Area CStairs = new Area();
 				Building1F1.Areas.Clear();
-				Building1F1.Areas.AddRange(new[] 
+				Building1F1.Areas.AddRange(new[]
 					{ NLobby, SLobby, /*Library, Study, CStairs*/ });
 				Building1F1.Objects.Clear();
 
 				AObject doorNLobby = AObject.SimpleDoor(
-					dest:	Campus, 
-					name:	"北侧大门",
-					alias:	new[] { "外面", "大门", "门" },
-					desc:	"一扇开阔的玻璃门外，教学楼间的广场被暗紫色的天空微弱地照亮。",
-					flopside: () => Campus.FindObjectInternal("行政楼的正门"));
-				doorNLobby.OnEntering = (s, v) => 
+					dest:		Campus,
+					name:		"北侧大门",
+					alias:		new[] { "外面", "大门", "门" },
+					desc:		"一扇开阔的玻璃门外，教学楼间的广场被暗紫色的天空微弱地照亮。",
+					flopside:	() => Campus.FindObjectInternal("行政楼的正门"));
+				doorNLobby.OnEntering = (s, v) =>
 				{
-					Campus.CurrentArea = Building1F1.FindArea("教学楼间的小广场"); 
+					Campus.CurrentArea = Campus.FindArea("教学楼间的小广场");
 					return HandleResult.Continue;
 				};
 				Building1F1.Objects.Add(doorNLobby);
@@ -42,17 +39,18 @@ namespace Advent
 					usable:		new AObject[] { doorNLobby },
 					notClear:	new AObject[0],
 					godir:		new Dictionary<Direction, Area>
-								{ { Direction.S, SLobby } });
+								{ { Direction.S, SLobby } },
+					defDoor:	doorNLobby);
 
 				AObject doorSLobby = AObject.SimpleDoor(
-					dest:	Campus, 
-					name:	"南侧大门",
-					alias:	new[] { "外面", "大门", "门" },
-					desc:	"一扇开阔的玻璃门外，道路后面是寝室楼和树木的阴暗影子。",
-					flopside: () => Campus.FindObjectInternal("行政楼的南门"));
-				doorSLobby.OnEntering = (s, v) => 
+					dest:		Campus,
+					name:		"南侧大门",
+					alias:		new[] { "外面", "大门", "门" },
+					desc:		"一扇开阔的玻璃门外，道路后面是寝室楼和树木的阴暗影子。",
+					flopside:	() => Campus.FindObjectInternal("行政楼的南门"));
+				doorSLobby.OnEntering = (s, v) =>
 				{
-					Campus.CurrentArea = Building1F1.FindArea("道路"); 
+					Campus.CurrentArea = Campus.FindArea("道路");
 					return HandleResult.Continue;
 				};
 				Building1F1.Objects.Add(doorSLobby);
@@ -62,7 +60,8 @@ namespace Advent
 					usable:		new AObject[] { doorSLobby },
 					notClear:	new AObject[0],
 					godir:		new Dictionary<Direction, Area>
-								{ { Direction.N, NLobby } });
+								{ { Direction.N, NLobby } },
+					defDoor:	doorSLobby);
 			}
 
 			FirstFloor();

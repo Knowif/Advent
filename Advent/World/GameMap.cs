@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using static Advent.Interactive;
 
 namespace Advent
 {
-	partial class GameMap
+	public partial class GameMap
 	{
 		public static Room Campus = new Room();
 
@@ -27,9 +26,10 @@ namespace Advent
 		// we need a complete list of rooms, doors, areas and objects
 		// when we save game files. Later on we restore eveything.
 		public static Room[] Rooms = new Room[]
-		{ 
-			Dormitory12, Restroom, Balcony, 
+		{
+			Dormitory12, Restroom, Balcony,
 			DormsHallway, LobbyNo8, Campus, Building1F1
+			// FIXME: should DarknessRoom be added?
 		};
 		public static List<Area> Areas = new List<Area>();
 		public static List<AObject> Objects = new List<AObject>();
@@ -61,9 +61,9 @@ namespace Advent
 				BuildObjList(oo);
 		}
 
-		private static void SetupArea(ref Area a, string name, string desc, 
-			AObject[] usable, AObject[] notClear, Dictionary<Direction, Area> godir, 
-			string ldesc = "", string[] noDesc = null)
+		private static void SetupArea(ref Area a, string name, string desc,
+			AObject[] usable, AObject[] notClear, Dictionary<Direction, Area> godir,
+			string ldesc = "", AObject defDoor = null, string[] noDesc = null)
 		{
 			a.Name = name;
 			if (ldesc == "")
@@ -71,6 +71,7 @@ namespace Advent
 			else
 				a.OverrideDescription = (s, v) => v.IsLight() ? ldesc : desc;
 			a.AreaTo = godir;
+			a.DefaultDoor = defDoor;
 			a.FilterObject = (x) =>
 			{
 				if (notClear.Contains(x)) return ObjectVisibility.Unclear;
@@ -79,24 +80,10 @@ namespace Advent
 			};
 		}
 
-		private static Area MakeArea(string name, string desc, AObject[] usable,
-			AObject[] notClear, Dictionary<Direction, Area> godir)
-		{
-			Area a = new Area();
-			SetupArea(ref a, name, desc, usable, notClear, godir);
-			return a;
-		}
-
-		private static void AddArea(Room r, string name, string desc, AObject[] usable,
-			AObject[] notClear, Dictionary<Direction, Area> godir)
-		{
-			r.Areas.Add(MakeArea(name, desc, usable, notClear, godir));
-		}
-
 		public static void BuildCommons()
 		{
 			// reusable objects here
-			
+
 		}
 	}
 }

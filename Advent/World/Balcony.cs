@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using static Advent.Interactive;
-
-namespace Advent
+﻿namespace Advent
 {
 	partial class GameMap
 	{
@@ -24,21 +21,21 @@ namespace Advent
 
 			AObject TrashBin = new AObject(
 				"垃圾桶", new[] { "桶", "垃圾" },
-				desc:	"看上去黑漆漆的。",
-				ldesc:	"一个套着垃圾袋的垃圾桶，里面没有任何东西。")
+				desc: 		"看上去黑漆漆的。",
+				ldesc: 		"一个套着垃圾袋的垃圾桶，里面没有任何东西。")
 			{ IsContainer = true };
 
 			AObject Darkness = new AObject(
 				"黑暗", new string[0],
-				desc:	"在黑暗中看着黑暗是一种怪异的体验。事实上它并不全是黑暗：它其实在发光，室内窗帘后的微光便是它发出的。看着它使你感到头晕。",
-				ldesc:	"不像是雾，手电筒照不穿它。你只能形容它为“黑暗”：事实上它在发光，室内窗帘后的微光便是它发出的。但你看着它的时候你完全确定它就是一片黑暗，深不可测，使你头晕。")
+				desc: 		"在黑暗中看着黑暗是一种怪异的体验。事实上它并不全是黑暗：它其实在发光，室内窗帘后的微光便是它发出的。看着它使你感到头晕。",
+				ldesc: 		"不像是雾，手电筒照不穿它。你只能形容它为“黑暗”：事实上它在发光，室内窗帘后的微光便是它发出的。但你看着它的时候你完全确定它就是一片黑暗，深不可测，使你头晕。")
 			{ Information = (s, v) => "栏杆外什么也没有，只是一片深深的、超现实的黑暗。" };
 
 			AObject RestroomDoor = AObject.SimpleDoor(
-				Restroom, "去洗手间过道的门", new string[] 
+				Restroom, "去洗手间过道的门", new string[]
 					{ "厕所门", "洗手间门", "厕所", "洗手间", "移门", "门" },
-				desc: "通往洗手间过道的移门。",
-				flopside: () => Restroom.FindObjectInternal("去阳台的移门"));
+				desc: 		"通往洗手间过道的移门。",
+				flopside: 	() => Restroom.FindObjectInternal("去阳台的移门"));
 
 			Balcony.Objects.Clear();
 			Balcony.Objects.AddRange(new[] { TrashBin, Darkness, RestroomDoor });

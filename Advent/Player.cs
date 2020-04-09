@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using static Advent.Interactive;
 
 namespace Advent
 {
-	partial class Player
+	public partial class Player
 	{
 		internal const string ErrDoNotKnowItem = "我不知道这是什么，请尝试不同的表达方法。\n\n";
 		internal const string NondescriptStr = "你没有看到任何特别之处。\n\n";
@@ -14,7 +14,7 @@ namespace Advent
 		public PlayerVariables Variables;
 
 		private List<KeyValuePair<string, Action<string>>> VerbTable;
-		
+
 		public Player()
 		{
 			var t = new Dictionary<string, Action<string>>
@@ -31,10 +31,10 @@ namespace Advent
 				{ "出去", GoOut }, { "出", GoOut }, { "逃脱", GoOut }, { "逃出", GoOut },
 
 				// special functions to handle ambiguous Chinese
-				{ "拧开", TurnOnOrOpen }, { "拉开", TurnOnOrOpen }, 
-				{ "打开", TurnOnOrOpen }, { "旋开", TurnOnOrOpen }, 
+				{ "拧开", TurnOnOrOpen }, { "拉开", TurnOnOrOpen },
+				{ "打开", TurnOnOrOpen }, { "旋开", TurnOnOrOpen },
 				{ "开启", TurnOnOrOpen }, { "开", TurnOnOrOpen },
-				{ "关闭", TurnOffOrClose }, { "关上", TurnOffOrClose }, 
+				{ "关闭", TurnOffOrClose }, { "关上", TurnOffOrClose },
 				{ "关", TurnOffOrClose },
 
 				{ "拿起", Take }, { "拿走", Take}, {"拿", Take},
@@ -45,7 +45,7 @@ namespace Advent
 				{ "检查", Examine },
 
 				// TODO: 闻 攻击 触摸
-				{ "闻", Smell }, { "触摸", Touch }, { "触碰", Touch }, 
+				{ "闻", Smell }, { "触摸", Touch }, { "触碰", Touch },
 				{ "摸", Touch }, { "碰", Touch }, { "听", Listen }
 			};
 			VerbTable = t.ToList();
@@ -124,7 +124,7 @@ namespace Advent
 			Clear();
 
 			Print($"你突然醒了过来{(Variables.stopReason == "darkness" ? "，黑暗带来的眩晕感还回旋在你头脑中" : "")}{(Variables.stopReason == "cold" ? "，仍然浑身颤抖着" : "")}。\n\n头顶上又是熟识的床板，四周又是熟识的墙壁和窗帘。但是你现在快乐而清晰地看着晨光穿过帘子重新照射着房间，使一切容光焕发。{(Variables.InventoryGet("手电筒") == null ? "" : "你的手电筒仍然放在架子上原位处。")}{(Variables.InventoryGet("水杯") == null ? "" : "你的水杯仍然放在桌子上。")}{(Variables.foundNobody || Variables.foundDarkness1 || Variables.foundWatchStop ? "你肯定做了一场奇怪的梦，梦见自己醒来。" : "")}{(Variables.foundNobody ? "它反正不会是真的；你不可能梦游，因为——你稍稍起身，仿佛是确认一下——所有人都在床上。一个不少。" : "")}你看向手表，{(Variables.foundWatchStop ? "秒针欢快地走着，" : "")}时间是早晨六点十六分。周二。生活的必然性从表盘上三个小小的字母中钻出来。还有很多事要做。周四考试，本来可以放松一下的星期二突然有了很多任务。你翻来覆去地思考这些不能改变的东西，仿佛试着抓住生活的尾巴，让它慢下来。\n\n");
-			
+
 			PrintCentered("* 第一夜结束，按回车继续。 *");
 			Pause();
 

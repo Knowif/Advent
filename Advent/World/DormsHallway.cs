@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using static Advent.Interactive;
+﻿using static Advent.Interactive;
 
 namespace Advent
 {
@@ -17,14 +16,14 @@ namespace Advent
 
 			AObject Sign = new AObject(
 				"标志", new[] { "安全出口", "绿光", "标牌" },
-				desc:	"很远就能看得清楚，主要是因为它一如往常，没什么特别：“安全出口”，一个指向楼梯的发光箭头，还有一个逃跑人形的发光标识。",
+				desc: "很远就能看得清楚，主要是因为它一如往常，没什么特别：“安全出口”，一个指向楼梯的发光箭头，还有一个逃跑人形的发光标识。",
 				// You may see that the escaping humanoid symbol disappears in the dark. This is only an ominous easter egg, for clarification.
-				ldesc:	"绿光就是从这个标志上发出来。你现在用手电筒指向它，它的光就收敛起来了。标志上有“安全出口”几个字加上一个指向楼梯的箭头。");
+				ldesc: "绿光就是从这个标志上发出来。你现在用手电筒指向它，它的光就收敛起来了。标志上有“安全出口”几个字加上一个指向楼梯的箭头。");
 
 			DormsHallway.Objects.Clear();
 			DormsHallway.Objects.Add(Sign);
 
-			DormsHallway.Objects.Add(new AObject("墙壁", 
+			DormsHallway.Objects.Add(new AObject("墙壁",
 				new[] { "墙壁", "墙", "地面", "地板", "地", "楼梯", "门" }));
 
 			// Now we build all the 20 doors
@@ -39,7 +38,7 @@ namespace Advent
 					DormsHallway.Objects.Add(d12);
 				} else
 				{
-					AObject d = AObject.SimpleDoor(null, i + "#寝室的门", 
+					AObject d = AObject.SimpleDoor(null, i + "#寝室的门",
 						new[] { i + "#寝室门", i + "#门", i + "#寝室", i + "#", "门" },
 
 						"去" + i + "#寝室的门。", locked: true);

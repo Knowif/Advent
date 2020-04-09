@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using static Advent.Interactive;
 
 namespace Advent
@@ -28,7 +26,7 @@ namespace Advent
 			{
 				string[] dirs = new[] { "东", "南", "西", "北", "东北", "西北", "东南", "西南" };
 				for (int i = 0; i < 8; i++)
-					if (dirs[i] == cmd) dir = (Direction) i;
+					if (dirs[i] == cmd) dir = (Direction)i;
 			}
 			if (dir != null)
 			{
@@ -37,7 +35,7 @@ namespace Advent
 				res = (CArea != null) ?
 					CArea.PostCommand(CArea, Variables, cmd) : HandleResult.Continue;
 				if (res != HandleResult.Continue) return;
-				res = CRoom.PostCommand(CRoom, Variables, cmd);
+				CRoom.PostCommand(CRoom, Variables, cmd);
 				return;
 			}
 
@@ -112,7 +110,7 @@ namespace Advent
 			{
 				Print(CRoom.CurrentArea.Name + "\n\n");
 			}
-			
+
 			string areadesc = CArea == null ? "" : CArea.OverrideDescription(CArea, Variables);
 			if (areadesc != "") Print(areadesc + "\n\n");
 			else Print(CRoom.GetDescription(CRoom, Variables));
@@ -123,14 +121,14 @@ namespace Advent
 				if (CArea == null || CArea.FilterObject(obj) == ObjectVisibility.Visible)
 				{
 					string info = obj.Information(obj, Variables);
-					if (info != "") 
+					if (info != "")
 					{
-						Print(info); 
+						Print(info);
 						hasObj = true;
 					}
 				}
 			}
-			if (hasObj) Print("\n\n"); 
+			if (hasObj) Print("\n\n");
 
 			Print(CRoom.PostDescription(CRoom, Variables));
 		}
@@ -157,9 +155,9 @@ namespace Advent
 			foreach (var subObj in obj.SubObjects)
 			{
 				string info = subObj.Information(subObj, Variables);
-				if (info != "") 
+				if (info != "")
 				{
-					Print(info); 
+					Print(info);
 					hadSubInfo = true;
 				}
 			}
@@ -264,7 +262,7 @@ namespace Advent
 						Print("你打开了它。\n\n");
 					}
 				}
-				res = CRoom.PostTurningOn(CRoom, Variables, obj);
+				CRoom.PostTurningOn(CRoom, Variables, obj);
 			}
 		}
 
@@ -289,7 +287,7 @@ namespace Advent
 						Print("你关闭了它。\n\n");
 					}
 				}
-				res = CRoom.PostTurningOff(CRoom, Variables, obj);
+				CRoom.PostTurningOff(CRoom, Variables, obj);
 			}
 		}
 
@@ -323,7 +321,7 @@ namespace Advent
 					Print("你打开了它。\n\n");
 				} else if (res == HandleResult.Refused) return;
 			} else if (res == HandleResult.Refused) return;
-			res = CRoom.PostOpening(CRoom, Variables, obj);
+			CRoom.PostOpening(CRoom, Variables, obj);
 		}
 
 		private void CloseThing(AObject obj)
@@ -351,9 +349,9 @@ namespace Advent
 					Print("你关上了它。\n\n");
 				} else if (res == HandleResult.Refused) return;
 			} else if (res == HandleResult.Refused) return;
-			res = CRoom.PostClosing(CRoom, Variables, obj);
+			CRoom.PostClosing(CRoom, Variables, obj);
 		}
-		
+
 		private AObject FindSensoryObject(string p)
 		{
 			AObject iobj = Variables.InventoryGet(p);
@@ -427,6 +425,8 @@ namespace Advent
 				Print("它不是你能拿起来的东西。\n\n");
 			else
 			{
+				if (obj.OnTaking(obj, Variables) != HandleResult.Continue)
+					return;
 				if (obj.Parent != null)
 				{
 					obj.Parent.SubObjects.Remove(obj);
@@ -461,9 +461,17 @@ namespace Advent
 		{
 			if (p.Length > 0 && !CRoom.Alias.Contains(p) && CRoom.Name != p)
 				Print("你并不在" + p + "里，所以无法出去。\n\n");
-			else if (CRoom.DefaultDoor == null && CRoom.DefaultOutWay == null)
+			else if (CArea?.DefaultDoor == null && CArea?.DefaultOutWay == null 
+					&& CRoom.DefaultDoor == null && CRoom.DefaultOutWay == null)
 				Print("你并不清楚应该如何出去。\n\n");
-			else if (CRoom.DefaultOutWay != null)
+			else if (CArea?.DefaultOutWay != null)
+				GoDirection((Direction)CArea.DefaultOutWay);
+			else if (CArea?.DefaultDoor != null)
+			{
+				if (!CArea.DefaultDoor.OpenState)
+					OpenThing(CArea.DefaultDoor);
+				Enter(CArea.DefaultDoor);
+			} else if (CRoom.DefaultOutWay != null)
 				GoDirection((Direction)CRoom.DefaultOutWay);
 			else
 			{
@@ -531,7 +539,7 @@ namespace Advent
 			AObject iobj = Variables.InventoryGet(p);
 			if (iobj != null)
 				DescribeObject(iobj);
-			else if (p == "" || p == CRoom.Name || CRoom.Alias.Contains(p) 
+			else if (p == "" || p == CRoom.Name || CRoom.Alias.Contains(p)
 						|| p == "房间" || p == "周围")
 				DescribeRoom();
 			else
@@ -559,7 +567,7 @@ namespace Advent
 			{
 				Print("你身上带着：");
 				for (int i = 0; i < Variables.inventory.Count; i++)
-					Print(Variables.inventory[i].Name + 
+					Print(Variables.inventory[i].Name +
 							(i < (Variables.inventory.Count - 1) ? "，" : "。\n\n"));
 			}
 		}

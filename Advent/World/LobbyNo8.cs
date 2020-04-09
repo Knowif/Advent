@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using static Advent.Interactive;
-
-namespace Advent
+﻿namespace Advent
 {
 	partial class GameMap
 	{
@@ -20,7 +17,7 @@ namespace Advent
 			};
 
 			LobbyNo8.Objects.Clear();
-			LobbyNo8.Objects.Add(new AObject("墙壁", new string[] 
+			LobbyNo8.Objects.Add(new AObject("墙壁", new string[]
 				{ "墙壁", "墙", "地面", "地板", "地", "楼梯", "门", "灯", "灯光", "图案", "天花板" }));
 
 			AObject KeeperRoomDoor = AObject.SimpleDoor(
@@ -31,7 +28,8 @@ namespace Advent
 			AObject OutDoor = AObject.SimpleDoor(
 				DarknessRoom, "去室外的大门", new[] { "外面", "室外", "大门", "门", "门外" },
 				"通向室外的大门。", open: true);
-			
+			OutDoor.SkipConsistencyTest = true;
+
 			LobbyNo8.Objects.AddRange(new[] { KeeperRoomDoor, OutDoor });
 
 			LobbyNo8.DefaultDoor = OutDoor;
