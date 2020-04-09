@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Advent.AObject">
+    <Position X="8" Y="0.5" Width="1.75" />
+    <NestedTypes>
+      <Delegate Name="Advent.AObject.Handler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Definitions.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="Advent.AObject.ObjHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Definitions.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>KgAAECAQAAIwAAKAABAAQAQAAQEAAAAkWAAgAEBAAAA=</HashCode>
+      <FileName>Definitions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Advent.Doorway">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="Advent.Doorway.Handler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Definitions.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>IAAACCAAAgIgAAIAACAAAAAAAAAAAAAgQQABAABAAAA=</HashCode>
+      <FileName>Definitions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Advent.Area">
+    <Position X="6.25" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="Advent.Area.Handler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Definitions.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="Advent.Area.ObjHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Definitions.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="Advent.Area.CmdHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Definitions.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="Advent.Area.DirHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Definitions.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAQAIAABABAAAAAAAAAAQAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Definitions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Advent.Room">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="Advent.Room.Descriptor" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Definitions.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="Advent.Room.CmdHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Definitions.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="Advent.Room.ObjHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Definitions.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>CAAEQCICAAIgIAKAIoAACAQAAQGAABEESEAAAEBAAUA=</HashCode>
+      <FileName>Definitions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Advent.Direction" Collapsed="true">
+    <Position X="0.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAACEAAAAAAAAAAAQgAAAAAAAAAAhCIAAI=</HashCode>
+      <FileName>Definitions.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Advent.HandleResult" Collapsed="true">
+    <Position X="2.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACCAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Definitions.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

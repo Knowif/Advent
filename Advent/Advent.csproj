@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Advent</RootNamespace>
     <AssemblyName>Advent</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Advent.Program</StartupObject>
@@ -46,13 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Darkness.cs" />
+    <Compile Include="PlayerCmd.cs" />
+    <Compile Include="World\Building1.cs" />
+    <Compile Include="World\Campus.cs" />
+    <Compile Include="World\Darkness.cs" />
     <Compile Include="Interface.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Interface.Designer.cs">
       <DependentUpon>Interface.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utility.cs" />
+    <Compile Include="World\Day2Setting.cs" />
     <Compile Include="World\LobbyNo8.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -84,6 +91,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\Help.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
