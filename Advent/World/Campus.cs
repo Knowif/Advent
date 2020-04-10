@@ -7,7 +7,7 @@ namespace Advent
 		static void BuildCampus()
 		{
 			Campus.Name = "学校";
-			Campus.Alias = new string[0];
+			Campus.Alias.Clear();
 			Campus.IsLit = true;
 			Campus.IsWarm = false;
 
@@ -93,7 +93,7 @@ namespace Advent
 				desc: 		"教学楼边的长方形池塘里，略微浑浊的水面被风吹成网状褶皱，天空的颜色在其中破碎。几只模糊的鱼在水中移动。");
 			AObject Fish = new AObject(
 				"鱼", new string[0],
-				desc : "几只鱼模糊地在水中移动。在不明朗的光线中你分辨出它们的样子：红色，黑色，白色，它们的胡须，它们大而呆滞的眼睛。") { IsTakable = true };
+				desc:		"几只鱼模糊地在水中移动。在不明朗的光线中你分辨出它们的样子：红色，黑色，白色，它们的胡须，它们大而呆滞的眼睛。") { IsTakable = true };
 			Fish.OnBeingSmelled = GymPond.OnBeingSmelled = (s, v) =>
 			{
 				Interactive.Print("闻起来像水。\n\n");

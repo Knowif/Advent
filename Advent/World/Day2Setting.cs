@@ -34,16 +34,16 @@ namespace Advent
 			{
 				if (self.IsLit)
 					return Dormitory12.LightDescription +
-						"\n\n窗帘拉开，外面的天空里滚动着紫红色的浓云。\n\n";
+						"\n\n窗帘拉开，外面的天空里滚动着紫红色的浓云。";
 				else if (self.IsPlayerLit)
 					return Dormitory12.LightDescription +
-						"\n\n窗帘后什么地方透出一种红晕，但几乎被手电筒的强光掩盖了。\n\n";
+						"\n\n窗帘后什么地方透出一种红晕，但几乎被手电筒的强光掩盖了。";
 				else
 					return Dormitory12.Description +
-						"\n\n有一种可爱的红晕穿透窗帘照进来。\n\n";
+						"\n\n有一种可爱的红晕穿透窗帘照进来。";
 			};
 
-			Dormitory12.SetObjectInternal("窗帘",
+			Dormitory12.ReplaceObjectInternal("窗帘",
 				new AObject(Dormitory12.FindObjectInternal("窗帘"))
 				{
 					Description = (_s, _v) =>
@@ -85,7 +85,7 @@ namespace Advent
 					}
 				});
 
-			Dormitory12.SetObjectInternal("窗户",
+			Dormitory12.ReplaceObjectInternal("窗户",
 				new AObject(Dormitory12.FindObjectInternal("窗户"))
 				{
 					Description = (_s, _v) =>
@@ -105,6 +105,7 @@ namespace Advent
 					Print("Flooooooooooosh!!\n\n");
 					return HandleResult.FullManaged;
 				}
+				// TODO: move these to separate verbs
 				if (p == "起床" || p == "起来")
 				{
 					if (self.CurrentArea.Name == "床上")
@@ -116,7 +117,7 @@ namespace Advent
 						Print("你并不在床上。\n\n");
 
 					return HandleResult.FullManaged;
-				} else if (p.StartsWith("睡"))
+				} else if ((p == "睡" || p == "睡觉"))
 				{
 					Print("现在你不想睡觉。\n\n");
 					return HandleResult.FullManaged;

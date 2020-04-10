@@ -5,7 +5,8 @@
 		static void BuildLobbyNo8()
 		{
 			LobbyNo8.Name = "8#寝室楼大厅";
-			LobbyNo8.Alias = new[] { "大厅", "门厅" };
+			LobbyNo8.Alias.Clear();
+			LobbyNo8.Alias.AddRange(new[] { "大厅", "门厅" });
 			LobbyNo8.IsLit = true;
 
 			LobbyNo8.Description = LobbyNo8.Description =
@@ -15,10 +16,15 @@
 				v.foundDarkness1 = true;
 				return self.FindObjectInternal("大门").OpenState ? "风从门外卷进来。\n\n" : "";
 			};
+			LobbyNo8.OnListen = (self, v, p) =>
+			{
+				Interactive.Print("你听见风卷进来的声音：卷到哪里去？这里并没有对流……");
+				return HandleResult.Continue;
+			};
 
 			LobbyNo8.Objects.Clear();
 			LobbyNo8.Objects.Add(new AObject("墙壁", new string[]
-				{ "墙壁", "墙", "地面", "地板", "地", "楼梯", "门", "灯", "灯光", "图案", "天花板" }));
+				{ "墙壁", "墙", "地面", "地板", "地", "楼梯", "灯", "灯光", "图案", "天花板" }));
 
 			AObject KeeperRoomDoor = AObject.SimpleDoor(
 				null, "去值班房的门", new[] { "值班房门", "值班房", "门" },

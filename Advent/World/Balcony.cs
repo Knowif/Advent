@@ -5,13 +5,18 @@
 		static void BuildBalcony()
 		{
 			Balcony.Name = "阳台";
-			Balcony.Alias = new string[0];
+			Balcony.Alias.Clear();
 			Balcony.IsWarm = false;
 
 			Balcony.LightDescription =
 				"小瓷砖铺成的地面在光照下异常耀眼。周围环绕着的金属栏杆增加着这里的狭小感。地面上有两个垃圾桶。你身后是回洗手间过道的移门。风声呼啸。";
 			Balcony.Description =
 				"没有灯光照明，阳台看上去只是模糊的剪影。你得小心点才不会碰到地上的两个垃圾桶。你身后是回洗手间过道的移门。风声呼啸。";
+			Balcony.OnListen = (self, v, p) =>
+			{
+				Interactive.Print("你听见风的声音。");
+				return HandleResult.Continue;
+			};
 
 			Balcony.PostDescription = (self, v) =>
 			{

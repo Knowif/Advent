@@ -7,7 +7,8 @@ namespace Advent
 		static void BuildDormsHallway()
 		{
 			DormsHallway.Name = "寝室楼二楼走廊";
-			DormsHallway.Alias = new[] { "走廊", "门廊" };
+			DormsHallway.Alias.Clear();
+			DormsHallway.Alias.AddRange(new[] { "走廊", "门廊" });
 
 			DormsHallway.Description =
 				"“安全出口”的标志在这里发出荧荧的绿光。走廊延伸到远处，两边尽头都是墙壁。北侧有上下楼梯，南侧相应位置是储藏室。此外就是寝室了。从9#到13#是你们班的，而其中12#就是你所在的那间。";

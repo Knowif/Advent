@@ -7,7 +7,8 @@ namespace Advent
 		static void BuildRestroom()
 		{
 			Restroom.Name = "洗手间和过道";
-			Restroom.Alias = new[] { "洗手间", "过道" };
+			Restroom.Alias.Clear();
+			Restroom.Alias.AddRange(new[] { "洗手间", "过道" });
 
 			Restroom.LightDescription =
 				"手电筒在镜子里映出一片光芒，几乎掩盖了你的模样。下面的黑色台面上有两个洗手池。镜子的墙后有两个蹲厕和一个淋浴间，没有门，所以夜里上厕所会很方便。在洗手池对面，你能透过移门看见阳台一角。";
@@ -30,6 +31,7 @@ namespace Advent
 				desc: 		"两个金属水龙头。",
 				ldesc: 		"两个闪亮的金属水龙头。")
 			{ IsSwitch = true, SwitchState = false };
+			// it doesn't emit water for now, but in later stages of development I think I'll add support for it when I implement the chemistry module.
 
 			AObject Toilet = new AObject(
 				"蹲厕", new[] { "厕所", "便池" },

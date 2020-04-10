@@ -9,10 +9,10 @@ namespace Advent
 	public static class Interactive
 	{
 		private static readonly string[] buf;
-		private static readonly string padding = "";
+		private static readonly string padding;
 		private static string header = "";
 		private static int curX = 0;
-		public static bool UnixColoring = true;
+		public static bool UnixColoring { get; set; } = true;
 
 		static Interactive()
 		{
@@ -39,6 +39,8 @@ namespace Advent
 
 		public static int TextLength(string text, bool styled = true)
 		{
+			if (text == null)
+				throw new ArgumentNullException(nameof(text));
 			int textlen = 0;
 			foreach (char c in text)
 				if (c == '_' && styled) continue;
@@ -71,6 +73,8 @@ namespace Advent
 
 		public static void PrintCentered(string text, bool emphasize = false)
 		{
+			if (text == null)
+				throw new ArgumentNullException(nameof(text));
 			string[] lines = text.Split('\n');
 			for (int i = 0; i < buf.Length - lines.Length; i++)
 				buf[i] = buf[i + lines.Length];
@@ -101,6 +105,8 @@ namespace Advent
 		// Prints something to the software buffer. Doesn't flush immediately.
 		public static void Print(string text)
 		{
+			if (text == null)
+				throw new ArgumentNullException(nameof(text));
 			if (text.Length == 0) return;
 
 			List<string> temp = new List<string>(buf);

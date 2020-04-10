@@ -30,8 +30,8 @@ namespace Advent
 	{
 		// Default responses when examining, smelling, touching, etc.
 		// Per-room overridable defaulting mechanisms can also be designed, but this seems enough. 
-		public static string DefaultDescription = "你没有看到任何特殊之处。";
-		public static string DefaultSensoryResponse = "你没有感觉到任何特殊之处。";
+		public static string DefaultDescription { get; set; }  = "你没有看到任何特殊之处。";
+		public static string DefaultSensoryResponse { get; set; }  = "你没有感觉到任何特殊之处。";
 
 		public delegate string Descriptor(AObject self, PlayerVariables v);
 		public delegate HandleResult Handler(AObject self, PlayerVariables v);
@@ -40,58 +40,62 @@ namespace Advent
 		//public static readonly ObjHandler DefaultObjHandler = (self, v, p) => HandleResult.Continue;
 
 		// general properties
-		public string Name;
-		public string[] Alias;
-		public Descriptor Information = (s, v) => ""; // shown when the object is seen in the room
-		public Descriptor Description = (s, v) => ""; // shown when it is being EXAMINEd
-		public Descriptor LightDescription = (s, v) => ""; // the same, but in a lighted place
+		public string Name { get; set; }
+		public List<string> Alias { get; private set; }
+		public Descriptor Information { get; set; } 
+			= (s, v) => ""; // shown when the object is seen in the room
+		public Descriptor Description { get; set; }  
+			= (s, v) => ""; // shown when it is being EXAMINEd
+		public Descriptor LightDescription  { get; set; } 
+			= (s, v) => ""; // the same, but in a lighted place
 
 		// sub-objects
-		public List<AObject> SubObjects = new List<AObject>();
-		public AObject Parent;
+		public List<AObject> SubObjects { get; private set; }  = new List<AObject>();
+		public AObject Parent { get; set; }
 
 		// attributes
-		public bool IsNondescript = false; // the parser uses default responses for nondescript objects
-		public bool IsTakable = false;
-		public bool IsOpenable = false;
-		public bool IsContainer = false;
-		public bool IsSwitch = false;
-		public bool IsClothing = false;
-		public bool IsReachable = true; // whether certain sensory cmds are available
-		public bool IsClublikeWeapon = false;
-		public bool IsBladeWeapon = false;
+
+		// the parser uses default responses for nondescript objects
+		public bool IsNondescript		{ get; set; }  = false; 
+		public bool IsTakable			{ get; set; }  = false;
+		public bool IsOpenable			{ get; set; }  = false;
+		public bool IsContainer			{ get; set; }  = false;
+		public bool IsSwitch			{ get; set; }  = false;
+		public bool IsClothing			{ get; set; }  = false;
+		// whether certain sensory cmds are available
+		public bool IsReachable			{ get; set; }  = true; 
+		public bool IsClublikeWeapon	{ get; set; }  = false;
+		public bool IsBladeWeapon		{ get; set; }  = false;
 
 		// door-likes
-		public bool IsEnterable = false;
-		public bool IsLocked = false;
-		public Room RoomTo = null;
+		public bool IsEnterable			{ get; set; } = false;
+		public bool IsLocked			{ get; set; } = false;
+		public Room RoomTo				{ get; set; } = null;
 		// On most occasions, when we initialize a door's LinkedSide the linked door hasn't even been declared. So despite its being slower, it is quite useful to leave this property as a lambda that evaluates later.
-		public Func<AObject> LinkedSide = () => null;
+		public Func<AObject> LinkedSide { get; set; } = () => null;
 		// Sometimes we intentionally make doors' LinkedSide inconsistent, e.g. a => b but b => c, and would like to have the tester skip these doors.
-		public bool SkipConsistencyTest = false;
+		public bool SkipConsistencyTest { get; set; } = false;
 
 		// states
-		public bool OpenState = false;
-		public bool SwitchState = false;
+		public bool OpenState			{ get; set; } = false;
+		public bool SwitchState			{ get; set; } = false;
 
 		// events
-		// this is unused?
-		//public ObjHandler OnPuttingOn = DefaultObjHandler;
-		public Handler OnExaminaion = DefaultHandler;
-		public Handler OnTaking = DefaultHandler;
-		public Handler OnOpening = DefaultHandler;
-		public Handler OnClosing = DefaultHandler;
-		public Handler OnTurningOn = DefaultHandler;
-		public Handler OnTurningOff = DefaultHandler;
-		public Handler OnEntering = DefaultHandler;
-		public Handler OnBeingSmelled = DefaultHandler;
-		public Handler OnBeingTouched = DefaultHandler;
-		public Handler OnBeingListened = DefaultHandler;
+		public Handler OnExaminaion		{ get; set; } = DefaultHandler;
+		public Handler OnTaking			{ get; set; } = DefaultHandler;
+		public Handler OnOpening		{ get; set; } = DefaultHandler;
+		public Handler OnClosing		{ get; set; } = DefaultHandler;
+		public Handler OnTurningOn		{ get; set; } = DefaultHandler;
+		public Handler OnTurningOff		{ get; set; } = DefaultHandler;
+		public Handler OnEntering		{ get; set; } = DefaultHandler;
+		public Handler OnBeingSmelled	{ get; set; } = DefaultHandler;
+		public Handler OnBeingTouched	{ get; set; } = DefaultHandler;
+		public Handler OnBeingListened	{ get; set; } = DefaultHandler;
 
 		public AObject(string name, string[] alias)
 		{
 			Name = name;
-			Alias = alias;
+			Alias = alias.ToList();
 			IsNondescript = true;
 		}
 
@@ -99,10 +103,10 @@ namespace Advent
 			string info = "")
 		{
 			Name = name;
-			Alias = alias;
+			Alias = alias.ToList();
 			Information = (s, v) => info;
 			Description = (s, v) => desc;
-			if (ldesc == "")
+			if (string.IsNullOrEmpty(ldesc))
 				LightDescription = (s, v) => desc;
 			else
 				LightDescription = (s, v) => ldesc;
@@ -116,10 +120,10 @@ namespace Advent
 			{
 				RoomTo				= dest,
 				Name				= name,
-				Alias				= alias,
+				Alias				= alias.ToList(),
 				Description			= (s, v) => desc,
 				LightDescription	= (s, v) => desc,
-				IsNondescript		= desc == "",
+				IsNondescript		= string.IsNullOrEmpty(desc),
 				IsEnterable			= true,
 				IsOpenable			= true,
 				IsLocked			= locked,
@@ -130,25 +134,34 @@ namespace Advent
 		}
 
 		// It appears that in c# you can only write a copy constructor like this.
-		public AObject(AObject obj)
+		public AObject(AObject prototype)
 		{
-			Name = obj.Name; Alias = obj.Alias; IsTakable = obj.IsTakable;
-			Information = obj.Information; Description = obj.Description;
-			LightDescription = obj.LightDescription; SubObjects = obj.SubObjects;
-			Parent = obj.Parent;
+			if (prototype == null)
+				throw new ArgumentNullException(nameof(prototype));
+			Name = prototype.Name; 
+			Alias = prototype.Alias; 
+			IsTakable = prototype.IsTakable;
+			Information = prototype.Information; 
+			Description = prototype.Description;
+			LightDescription = prototype.LightDescription; 
+			SubObjects = prototype.SubObjects;
+			Parent = prototype.Parent;
 
-			IsOpenable = obj.IsOpenable; OpenState = obj.OpenState; IsSwitch = obj.IsSwitch;
-			SwitchState = obj.SwitchState; IsClothing = obj.IsClothing;
+			IsOpenable = prototype.IsOpenable; 
+			OpenState = prototype.OpenState; 
+			IsSwitch = prototype.IsSwitch;
+			SwitchState = prototype.SwitchState; 
+			IsClothing = prototype.IsClothing;
 
 			//OnPuttingOn = obj.OnPuttingOn; 
-			OnExaminaion = obj.OnExaminaion;
-			OnOpening = obj.OnOpening; 
-			OnClosing = obj.OnClosing;
-			OnTurningOn = obj.OnTurningOn; 
-			OnTurningOff = obj.OnTurningOff;
-			OnBeingSmelled = obj.OnBeingSmelled; 
-			OnBeingTouched = obj.OnBeingTouched;
-			OnBeingListened = obj.OnBeingListened;
+			OnExaminaion = prototype.OnExaminaion;
+			OnOpening = prototype.OnOpening; 
+			OnClosing = prototype.OnClosing;
+			OnTurningOn = prototype.OnTurningOn; 
+			OnTurningOff = prototype.OnTurningOff;
+			OnBeingSmelled = prototype.OnBeingSmelled; 
+			OnBeingTouched = prototype.OnBeingTouched;
+			OnBeingListened = prototype.OnBeingListened;
 		}
 
 		private AObject() { }
@@ -164,26 +177,28 @@ namespace Advent
 		public static readonly CmdHandler DefaultCmdHandler = (self, v, p) => HandleResult.Continue;
 		public static readonly DirHandler DefaultDirHandler = (self, v, d) => HandleResult.Continue;
 
-		public string Name;
+		public string Name { get; set; }
 
 		// For rooms with areas, the area-ways usually replace the room-ways.
 		// Leads to other rooms
-		public Dictionary<Direction, Room> RoomTo = new Dictionary<Direction, Room>();
+		public Dictionary<Direction, Room> RoomTo { get; private set; } 
+			= new Dictionary<Direction, Room>();
 		// Leads to other areas in this room
-		public Dictionary<Direction, Area> AreaTo = new Dictionary<Direction, Area>();
+		public Dictionary<Direction, Area> AreaTo { get; private set; } 
+			= new Dictionary<Direction, Area>();
 				
-		public AObject DefaultDoor;
-		public Direction? DefaultOutWay;
+		public AObject DefaultDoor  { get; set; }
+		public Direction? DefaultOutWay  { get; set; }
 
-		public Handler OnExamination			= DefaultHandler;
-		public CmdHandler OnQueryingObject		= DefaultCmdHandler;
-		public CmdHandler BeforeCommand			= DefaultCmdHandler;
-		public CmdHandler PostCommand			= DefaultCmdHandler;
-		public DirHandler OnGoDirection			= DefaultDirHandler;
-		public Descriptor OverrideDescription	= (s, v) => "";
+		public Handler OnExamination			{ get; set; } = DefaultHandler;
+		public CmdHandler OnQueryingObject		{ get; set; } = DefaultCmdHandler;
+		public CmdHandler BeforeCommand			{ get; set; } = DefaultCmdHandler;
+		public CmdHandler PostCommand			{ get; set; } = DefaultCmdHandler;
+		public DirHandler OnGoDirection			{ get; set; } = DefaultDirHandler;
+		public Descriptor OverrideDescription	{ get; set; } = (s, v) => "";
 
-		public Func<AObject, ObjectVisibility> FilterObject =
-			(x) => ObjectVisibility.Visible;
+		public Func<AObject, ObjectVisibility> FilterObject { get; set; } 
+			= (x) => ObjectVisibility.Visible;
 
 		public Area(string name) { Name = name; }
 		public Area() { }
@@ -191,53 +206,59 @@ namespace Advent
 
 	public class Room
 	{
-		public static string DefaultListenResponse = "这里很安静。";
-		public static string DefaultSensoryResponse = "你并未感觉到空气有任何特殊之处。";
+		private static readonly CmdHandler DefaultCHandler = 
+			(self, v, p) => HandleResult.Continue;
+		private static readonly ObjHandler DefaultOHandler = 
+			(self, v, p) => HandleResult.Continue;
+
+		public static string DefaultListenResponse { get; set; } = "这里很安静。";
+		public static string DefaultSensoryResponse { get; set; } = "你并未感觉到空气有任何特殊之处。";
 
 		public delegate string Descriptor(Room self, PlayerVariables v);
 		public delegate HandleResult CmdHandler(Room self, PlayerVariables v, string p);
 		public delegate HandleResult ObjHandler(Room self, PlayerVariables v, AObject obj);
 
 		// general properties
-		public string Name;
-		public string[] Alias;
-		public string Description;
-		public string LightDescription;
+		public string Name { get; set; }
+		public List<string> Alias { get; private set; } = new List<string>();
+		public string Description { get; set; }
+		public string LightDescription { get; set; }
 
 		// attributes
-		public bool IsLit;
-		public bool IsPlayerLit = false;
-		public bool IsWarm = true;
-		public AObject DefaultDoor;
-		public Direction? DefaultOutWay;
-		public Dictionary<Direction, Room> RoomTo = new Dictionary<Direction, Room>();
+		public bool IsLit { get; set; }
+		public bool IsPlayerLit { get; set; } = false;
+		public bool IsWarm { get; set; } = true;
+		public AObject DefaultDoor { get; set; }
+		public Direction? DefaultOutWay { get; set; }
+		public Dictionary<Direction, Room> RoomTo { get; private set; } 
+			= new Dictionary<Direction, Room>();
 
 		// states
-		public Area CurrentArea;
+		public Area CurrentArea { get; set; }
 
 		// objects
-		public List<AObject> Objects = new List<AObject>();
-		public List<Area> Areas = new List<Area>();
+		public List<AObject> Objects { get; private set; } = new List<AObject>();
+		public List<Area> Areas { get; private set; } = new List<Area>();
 
-		public Descriptor GetDescription = (self, v) =>
-			((self.IsLit || self.IsPlayerLit) ? self.LightDescription : self.Description) + "\n\n";
-		public Descriptor PostDescription = (self, v) => "";
+		public Descriptor GetDescription	{ get; set; } = (self, v) =>
+			((self.IsLit || self.IsPlayerLit) ? self.LightDescription : self.Description);
+		public Descriptor PostDescription	{ get; set; } = (self, v) => "";
 
-		public CmdHandler BeforeCommand		= (self, v, p) => HandleResult.Continue;
-		public CmdHandler PostCommand		= (self, v, p) => HandleResult.Continue;
-		public CmdHandler OnBeingSmelled	= (self, v, p) => HandleResult.Continue;
-		public CmdHandler OnListen			= (self, v, p) => HandleResult.Continue;
+		public CmdHandler BeforeCommand		{ get; set; } = DefaultCHandler;
+		public CmdHandler PostCommand		{ get; set; } = DefaultCHandler;
+		public CmdHandler OnBeingSmelled	{ get; set; } = DefaultCHandler;
+		public CmdHandler OnListen			{ get; set; } = DefaultCHandler;
 
-		public ObjHandler BeforeExaminaion	= (self, v, p) => HandleResult.Continue;
-		public ObjHandler PostExamination	= (self, v, p) => HandleResult.Continue;
-		public ObjHandler BeforeOpening		= (self, v, p) => HandleResult.Continue;
-		public ObjHandler PostOpening		= (self, v, p) => HandleResult.Continue;
-		public ObjHandler BeforeClosing		= (self, v, p) => HandleResult.Continue;
-		public ObjHandler PostClosing		= (self, v, p) => HandleResult.Continue;
-		public ObjHandler BeforeTurningOn	= (self, v, p) => HandleResult.Continue;
-		public ObjHandler PostTurningOn		= (self, v, p) => HandleResult.Continue;
-		public ObjHandler BeforeTurningOff	= (self, v, p) => HandleResult.Continue;
-		public ObjHandler PostTurningOff	= (self, v, p) => HandleResult.Continue;
+		public ObjHandler BeforeExaminaion	{ get; set; } = DefaultOHandler;
+		public ObjHandler PostExamination	{ get; set; } = DefaultOHandler;
+		public ObjHandler BeforeOpening		{ get; set; } = DefaultOHandler;
+		public ObjHandler PostOpening		{ get; set; } = DefaultOHandler;
+		public ObjHandler BeforeClosing		{ get; set; } = DefaultOHandler;
+		public ObjHandler PostClosing		{ get; set; } = DefaultOHandler;
+		public ObjHandler BeforeTurningOn	{ get; set; } = DefaultOHandler;
+		public ObjHandler PostTurningOn		{ get; set; } = DefaultOHandler;
+		public ObjHandler BeforeTurningOff	{ get; set; } = DefaultOHandler;
+		public ObjHandler PostTurningOff	{ get; set; } = DefaultOHandler;
 
 		public AObject FindObject(string name, PlayerVariables v)
 		{
@@ -248,8 +269,9 @@ namespace Advent
 				List<AObject> matches = new List<AObject>();
 				foreach (var obj in Objects)
 				{
-					if ((obj.Name == name || obj.Alias.Contains(name)) && (CurrentArea == null
-							|| CurrentArea.FilterObject(obj) != ObjectVisibility.NotVisible))
+					if (CurrentArea != null && CurrentArea.FilterObject(obj) == ObjectVisibility.NotVisible)
+						continue;
+					if ((obj.Name == name || obj.Alias.Contains(name)))
 						matches.Add(obj);
 					foreach (var subObj in obj.SubObjects)
 						if (subObj.Name == name || subObj.Alias.Contains(name))
@@ -288,17 +310,13 @@ namespace Advent
 			if (matches.Count == 1)
 				return matches[0];
 
-			//throw new ArgumentException("FindObjectInternal failed");
-			Print("** ERROR FindObjectInternal failed **\n\n");
-			System.Diagnostics.Trace.Assert(false);
-
-			return null;
+			throw new ArgumentException("FindObjectInternal failed");
 		}
 
 		public Area FindArea(string name)
 			=> Areas.Find(x => x.Name == name);
 
-		public void SetObjectInternal(string s, AObject obj)
-			=> Objects[Objects.FindIndex((x) => x.Name == s)] = obj;
+		public void ReplaceObjectInternal(string s, AObject newObj)
+			=> Objects[Objects.FindIndex((x) => x.Name == s)] = newObj;
 	}
 }

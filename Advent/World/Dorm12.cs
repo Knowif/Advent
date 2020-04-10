@@ -8,7 +8,8 @@ namespace Advent
 		static void BuildDormitory12()
 		{
 			Dormitory12.Name = "你的寝室";
-			Dormitory12.Alias = new[] { "寝室", "12#寝室", "12#" };
+			Dormitory12.Alias.Clear();
+			Dormitory12.Alias.AddRange(new[] { "寝室", "12#寝室", "12#" });
 
 			Dormitory12.LightDescription =
 				"这是你熟悉的寝室，闭上眼都能想象出它的样子。你能看见衣柜，桌子，床铺（四张：你睡在靠窗的下铺）以及通向走廊和洗手间过道的两扇门。";
@@ -105,10 +106,8 @@ namespace Advent
 				"桌子", new[] { "课桌", "桌椅" },
 				desc: 	"看上去漆黑一片，但是你知道自己的位置上有盏台灯，上面的格子里堆放着杂物。",
 				ldesc: 	"普通的桌子，从寝室一边的衣柜延伸到洗手间过道的门边。上面的格子里堆放着杂物。")
-			{
-				IsContainer = true,
-				SubObjects = new List<AObject> { Bottle, Flashlight, ACControl }
-			};
+			{ IsContainer = true };
+			Desk.SubObjects.AddRange(new[] { Bottle, Flashlight, ACControl });
 
 			AObject Lamp = new AObject(
 				"台灯", new[] { "灯" },
@@ -279,7 +278,7 @@ namespace Advent
 						Print("你并不在床上。\n\n");
 					self.PostCommand(self, v, p);
 					return HandleResult.FullManaged;
-				} else if (p.StartsWith("睡"))
+				} else if (p == "睡" || p == "睡觉")
 				{
 					Print($"{(self.CurrentArea == BedArea ? "" : "又一次走到床边躺下来之后，")}你被一种疲倦轻易地抓住了。你很快发现这很难逃脱——确切地说，你也不想要逃脱。闭上眼睛：这是多么美妙的动作，多么美好的感受啊！的确，你困了。你好像看见彩色的形状和线条在旋转，然后就睡着了。你没有再做梦。\n\n");
 					v.dreamStop = true;

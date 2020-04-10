@@ -9,7 +9,7 @@ namespace Advent
 			void FirstFloor()
 			{
 				Building1F1.Name = "行政楼[1#]一楼";
-				Building1F1.Alias = new string[0];
+				Building1F1.Alias.Clear();
 
 				Area NLobby = new Area();
 				Area SLobby = new Area();

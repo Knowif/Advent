@@ -3,36 +3,36 @@ using System.Linq;
 
 namespace Advent
 {
-	public partial class GameMap
+	public static partial class GameMap
 	{
-		public static Room Campus = new Room();
+		public readonly static Room Campus = new Room();
 
-		public static Room Dormitory12 = new Room();
-		public static Room Restroom = new Room();
-		public static Room Balcony = new Room();
-		public static Room DormsHallway = new Room();
-		public static Room LobbyNo8 = new Room();
+		public readonly static Room Dormitory12 = new Room();
+		public readonly static Room Restroom = new Room();
+		public readonly static Room Balcony = new Room();
+		public readonly static Room DormsHallway = new Room();
+		public readonly static Room LobbyNo8 = new Room();
 
-		public static Room Building1F1 = new Room();
+		public readonly static Room Building1F1 = new Room();
 		//public static Room Building1F2 = new Room();
 		//public static Room Building1F3 = new Room();
 		//public static Room Building1F4 = new Room();
 		//public static Room Building1F5 = new Room();
 		//public static Room Building1F6 = new Room();
 
-		public static Room DarknessRoom = new Room();
-		public static Area DarknessArea = new Area();
+		public readonly static Room DarknessRoom = new Room();
+		public readonly static Area DarknessArea = new Area();
 
 		// we need a complete list of rooms, doors, areas and objects
 		// when we save game files. Later on we restore eveything.
-		public static Room[] Rooms = new Room[]
+		public readonly static Room[] Rooms = new Room[]
 		{
 			Dormitory12, Restroom, Balcony,
 			DormsHallway, LobbyNo8, Campus, Building1F1
 			// FIXME: should DarknessRoom be added?
 		};
-		public static List<Area> Areas = new List<Area>();
-		public static List<AObject> Objects = new List<AObject>();
+		public readonly static List<Area> Areas = new List<Area>();
+		public readonly static List<AObject> Objects = new List<AObject>();
 
 		static GameMap()
 		{
@@ -66,11 +66,13 @@ namespace Advent
 			string ldesc = "", AObject defDoor = null, string[] noDesc = null)
 		{
 			a.Name = name;
-			if (ldesc == "")
+			if (string.IsNullOrEmpty(ldesc))
 				a.OverrideDescription = (s, v) => desc;
 			else
 				a.OverrideDescription = (s, v) => v.IsLight() ? ldesc : desc;
-			a.AreaTo = godir;
+			a.AreaTo.Clear();
+			foreach (var p in godir)
+				a.AreaTo.Add(p.Key, p.Value);
 			a.DefaultDoor = defDoor;
 			a.FilterObject = (x) =>
 			{

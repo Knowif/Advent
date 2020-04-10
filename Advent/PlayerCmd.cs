@@ -41,7 +41,8 @@ namespace Advent
 
 			// as command ...
 			foreach (var x in VerbTable)
-				if (cmd.StartsWith(x.Key))
+				// FIXME: what System.StringComparison should be used?
+				if (cmd.StartsWith(x.Key, System.StringComparison.Ordinal))
 				{
 					x.Value.Invoke(cmd.Substring(x.Key.Length));
 
@@ -111,9 +112,9 @@ namespace Advent
 				Print(CRoom.CurrentArea.Name + "\n\n");
 			}
 
-			string areadesc = CArea == null ? "" : CArea.OverrideDescription(CArea, Variables);
-			if (areadesc != "") Print(areadesc + "\n\n");
-			else Print(CRoom.GetDescription(CRoom, Variables));
+			string areadesc = CArea?.OverrideDescription(CArea, Variables);
+			if (!string.IsNullOrEmpty(areadesc)) Print(areadesc + "\n\n");
+			else Print(CRoom.GetDescription(CRoom, Variables) + "\n\n");
 
 			bool hasObj = false;
 			foreach (var obj in CRoom.Objects)
@@ -121,7 +122,7 @@ namespace Advent
 				if (CArea == null || CArea.FilterObject(obj) == ObjectVisibility.Visible)
 				{
 					string info = obj.Information(obj, Variables);
-					if (info != "")
+					if (!string.IsNullOrEmpty(info))
 					{
 						Print(info);
 						hasObj = true;
@@ -133,29 +134,29 @@ namespace Advent
 			Print(CRoom.PostDescription(CRoom, Variables));
 		}
 
-		public void DescribeObject(AObject obj)
+		public void DescribeObject(AObject what)
 		{
-			HandleResult res = CRoom.BeforeExaminaion(CRoom, Variables, obj);
+			HandleResult res = CRoom.BeforeExaminaion(CRoom, Variables, what);
 			if (res == HandleResult.Continue)
 			{
-				res = obj.OnExaminaion(obj, Variables);
+				res = what.OnExaminaion(what, Variables);
 				if (res == HandleResult.Continue)
-					if (obj.IsNondescript)
+					if (what.IsNondescript)
 						Print(AObject.DefaultDescription + "\n\n");
 					else if (CRoom.IsLit || CRoom.IsPlayerLit)
-						Print(obj.LightDescription(obj, Variables) + "\n\n");
+						Print(what.LightDescription(what, Variables) + "\n\n");
 					else
-						Print(obj.Description(obj, Variables) + "\n\n");
+						Print(what.Description(what, Variables) + "\n\n");
 			}
 
-			res = CRoom.PostExamination(CRoom, Variables, obj);
+			res = CRoom.PostExamination(CRoom, Variables, what);
 
 			// go on to provide information for all subobjects
 			bool hadSubInfo = false;
-			foreach (var subObj in obj.SubObjects)
+			foreach (var subObj in what.SubObjects)
 			{
 				string info = subObj.Information(subObj, Variables);
-				if (info != "")
+				if (string.IsNullOrEmpty(info))
 				{
 					Print(info);
 					hadSubInfo = true;
@@ -440,7 +441,7 @@ namespace Advent
 
 		public void GoTo(string p)
 		{
-			if (p == "")
+			if (string.IsNullOrEmpty(p))
 			{
 				Print("请说明要进入的是哪里。\n\n");
 				return;
@@ -459,7 +460,7 @@ namespace Advent
 
 		public void GoOut(string p)
 		{
-			if (p.Length > 0 && !CRoom.Alias.Contains(p) && CRoom.Name != p)
+			if (!string.IsNullOrEmpty(p) && !CRoom.Alias.Contains(p) && CRoom.Name != p)
 				Print("你并不在" + p + "里，所以无法出去。\n\n");
 			else if (CArea?.DefaultDoor == null && CArea?.DefaultOutWay == null 
 					&& CRoom.DefaultDoor == null && CRoom.DefaultOutWay == null)
@@ -483,7 +484,7 @@ namespace Advent
 
 		public void TurnOnOrOpen(string p)
 		{
-			if (p == "")
+			if (string.IsNullOrEmpty(p))
 			{
 				Print("请说明要开的是什么。\n\n");
 				return;
@@ -513,7 +514,7 @@ namespace Advent
 
 		public void TurnOffOrClose(string p)
 		{
-			if (p == "")
+			if (string.IsNullOrEmpty(p))
 			{
 				Print("请说明要关的是什么。\n\n");
 				return;
@@ -539,7 +540,7 @@ namespace Advent
 			AObject iobj = Variables.InventoryGet(p);
 			if (iobj != null)
 				DescribeObject(iobj);
-			else if (p == "" || p == CRoom.Name || CRoom.Alias.Contains(p)
+			else if (string.IsNullOrEmpty(p) || p == CRoom.Name || CRoom.Alias.Contains(p)
 						|| p == "房间" || p == "周围")
 				DescribeRoom();
 			else
@@ -574,7 +575,7 @@ namespace Advent
 
 		public void Touch(string p)
 		{
-			if (p == "")
+			if (string.IsNullOrEmpty(p))
 			{
 				Print("请说明要触摸的是什么。\n\n");
 				return;
@@ -588,7 +589,7 @@ namespace Advent
 
 		public void Smell(string p)
 		{
-			if (p == "")
+			if (string.IsNullOrEmpty(p))
 			{
 				if (CRoom.OnBeingSmelled(CRoom, Variables, p) == HandleResult.Continue)
 					Print(Room.DefaultSensoryResponse + "\n\n");
@@ -601,9 +602,9 @@ namespace Advent
 
 		public void Listen(string p)
 		{
-			if (p == "")
+			if (string.IsNullOrEmpty(p))
 			{
-				if (CRoom.OnBeingSmelled(CRoom, Variables, p) == HandleResult.Continue)
+				if (CRoom.OnListen(CRoom, Variables, p) == HandleResult.Continue)
 					Print(Room.DefaultListenResponse + "\n\n");
 				return;
 			}

@@ -11,12 +11,14 @@ namespace Advent
 		internal const string ErrDoNotKnowItem = "我不知道这是什么，请尝试不同的表达方法。\n\n";
 		internal const string NondescriptStr = "你没有看到任何特别之处。\n\n";
 
-		public PlayerVariables Variables;
+		public PlayerVariables Variables { get; private set; }
 
-		private List<KeyValuePair<string, Action<string>>> VerbTable;
+		private readonly List<KeyValuePair<string, Action<string>>> VerbTable;
 
 		public Player()
 		{
+			Variables = new PlayerVariables(this);
+
 			var t = new Dictionary<string, Action<string>>
 			{
 				{ "等", Wait },
@@ -57,10 +59,16 @@ namespace Advent
 		public void StartGame()
 		{
 #if DEBUG
-			int build = int.Parse(File.ReadAllText("build.txt"));
+			int build = int.Parse(File.ReadAllText("build.txt"), 
+				System.Globalization.CultureInfo.InvariantCulture);
 			Print("Build " + build + ". \n");
-			File.WriteAllText("build.txt", (build + 1).ToString());
-#endif
+			File.WriteAllText("build.txt", (build + 1).ToString(
+				System.Globalization.CultureInfo.InvariantCulture));
+			UnixColoring = false;
+			Pause();
+			// start right from day 2
+			SecondNight();
+#else
 			Print("为了获得最好的体验，建议使用新版Windows Terminal运行此程序。如果你使用推荐的或任何支持Unix着色系统的终端，请按回车。否则，请按空格。");
 			Flush();
 			UnixColoring = Console.ReadKey().Key == ConsoleKey.Enter;
@@ -82,7 +90,6 @@ namespace Advent
 			PrintCentered("“浑然不知    \n       我们活过的刹那\n   前后皆是暗夜。”            \n");
 			PrintCentered("                    里卡尔多·雷耶斯\n\n");
 
-#if !DEBUG
 			Print("\n[如有需要请调整控制台窗口大小并且重启程序]\n\n");
 			while (true)
 			{
@@ -98,12 +105,10 @@ namespace Advent
 				} else if (ans != "否") Print("请输入“是”或“否”。\n");
 				else break;
 			}
-#else
-			Pause();
-#endif
-			Variables = new PlayerVariables(this);
+
 			// chain-style evokation of nights
 			FirstNight();
+#endif
 		}
 
 		public void FirstNight()
@@ -151,7 +156,8 @@ namespace Advent
 			Pause("按任意键继续。");
 			Clear();
 
-			Print("你带着一种旋转的感觉醒来。\n\n你闭着眼睛等铃响，但是铃没有响。然后你掀开被子，感受十一月早晨微弱的寒意。奇怪，时间还早。甚至六点一刻也没有到。如果我一直停在梦中的世界里，醒来洗漱准备上课的时间是否就永远不会到来？你思考。\n\n");
+			bool cold = Variables.stopReason == "water" || Variables.stopReason == "cold";
+			Print($"你{(Variables.stopReason == "darkness" ? "带着一种旋转的感觉" : "突然")}醒来{(cold ? "，感觉很冷" : "")}。\n\n你闭着眼睛等铃响，但是铃没有响。然后你掀开被子，感受十一月早晨微弱的{(cold ? "寒意" : "暖气")}。奇怪，时间还早。甚至六点一刻也没有到。如果我一直停在梦中的世界里，醒来洗漱准备上课的时间是否就永远不会到来？你思考。\n\n");
 
 			PrintCentered("* 第二夜结束，按任意键继续。 *");
 			Pause();
@@ -176,9 +182,11 @@ namespace Advent
 
 		private void Save()
 		{
-			BinaryWriter w = new BinaryWriter(
-				new FileStream("save.txt", FileMode.OpenOrCreate));
-			Variables.Save(w);
+			using (BinaryWriter w = new BinaryWriter(
+				new FileStream("save.txt", FileMode.OpenOrCreate)))
+			{
+				Variables.Save(w);
+			}
 			// todo
 		}
 	}
