@@ -160,7 +160,7 @@ namespace Advent
 			LobbyNo8.FindObjectInternal("外面").RoomTo = Campus;
 			LobbyNo8.FindObjectInternal("外面").OnEntering = (self, v) =>
 			{
-				Campus.CurrentArea = Campus.FindArea("食堂和寝室楼之间");
+				Campus.ChangeArea("食堂和寝室楼之间");
 				return HandleResult.Continue;
 			};
 			LobbyNo8.FindObjectInternal("外面").LinkedSide = () =>

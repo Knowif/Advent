@@ -93,7 +93,7 @@ namespace Advent
 				desc: 		"教学楼边的长方形池塘里，略微浑浊的水面被风吹成网状褶皱，天空的颜色在其中破碎。几只模糊的鱼在水中移动。");
 			AObject Fish = new AObject(
 				"鱼", new string[0],
-				desc:		"几只鱼模糊地在水中移动。在不明朗的光线中你分辨出它们的样子：红色，黑色，白色，它们的胡须，它们大而呆滞的眼睛。") { IsTakable = true };
+				desc:		"几只鱼模糊地在水中移动。在不明朗的光线中你分辨出它们的样子：红色，黑色，白色，它们的胡须，它们大而呆滞的眼睛。");
 			Fish.OnBeingSmelled = GymPond.OnBeingSmelled = (s, v) =>
 			{
 				Interactive.Print("闻起来像水。\n\n");
@@ -221,7 +221,7 @@ namespace Advent
 				flopside: 	() => Building1F1.FindObjectInternal("南侧大门"));
 			doorS1Rd.OnEntering = (s, v) =>
 			{
-				Building1F1.CurrentArea = Building1F1.FindArea("大厅南侧");
+				Building1F1.ChangeArea("大厅南侧");
 				return HandleResult.Continue;
 			};
 			Campus.Objects.Add(doorS1Rd);
@@ -333,7 +333,7 @@ namespace Advent
 				flopside: 	() => Building1F1.FindObjectInternal("北侧大门"));
 			doorLoSq_3.OnEntering = (s, v) =>
 			{
-				Building1F1.CurrentArea = Building1F1.FindArea("大厅北侧");
+				Building1F1.ChangeArea("大厅北侧");
 				return HandleResult.Continue;
 			};
 			Campus.Objects.Add(doorLoSq_1);

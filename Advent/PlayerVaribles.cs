@@ -68,9 +68,12 @@ namespace Advent
 
 		public AObject Watch { get; private set; } = new AObject(
 			"手表", new[] { "表", "时间" },
-			desc: "手表的荧光指针显示着1:12。",
-			ldesc: "手表指着1:12:37，秒针一动不动。")
+			desc:	"手表的荧光指针显示着1:12。",
+			ldesc:	"手表指着1:12:37，秒针一动不动。",
+			sinfo:	"一个手表")
 		{
+			IsTakable = true,
+			Size = 0.1f,
 			OnExaminaion = (self, v) =>
 			{
 				if (v.IsLight() && !v.foundWatchStop)
@@ -89,10 +92,7 @@ namespace Advent
 			inventory.Add(Watch);
 		}
 
-		public bool IsLight()
-		{
-			return currentRoom.IsPlayerLit || currentRoom.IsLit;
-		}
+		public bool IsLight() => currentRoom.IsPlayerLit || currentRoom.IsLit;
 
 		public AObject InventoryGet(string name)
 		{

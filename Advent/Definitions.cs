@@ -35,19 +35,19 @@ namespace Advent
 
 		public delegate string Descriptor(AObject self, PlayerVariables v);
 		public delegate HandleResult Handler(AObject self, PlayerVariables v);
-		//public delegate HandleResult ObjHandler(AObject self, PlayerVariables v, AObject obj);
 		public static readonly Handler DefaultHandler = (self, v) => HandleResult.Continue;
-		//public static readonly ObjHandler DefaultObjHandler = (self, v, p) => HandleResult.Continue;
+		public static readonly Descriptor DefaultDescriptor = (self, v) => "";
 
 		// general properties
 		public string Name { get; set; }
 		public List<string> Alias { get; private set; }
+		public Descriptor ShortInfo { get; set; } = null;
 		public Descriptor Information { get; set; } 
-			= (s, v) => ""; // shown when the object is seen in the room
+			= DefaultDescriptor; // shown when the object is seen in the room
 		public Descriptor Description { get; set; }  
-			= (s, v) => ""; // shown when it is being EXAMINEd
+			= DefaultDescriptor; // shown when it is being EXAMINEd
 		public Descriptor LightDescription  { get; set; } 
-			= (s, v) => ""; // the same, but in a lighted place
+			= DefaultDescriptor; // the same, but in a lighted place
 
 		// sub-objects
 		public List<AObject> SubObjects { get; private set; }  = new List<AObject>();
@@ -56,16 +56,34 @@ namespace Advent
 		// attributes
 
 		// the parser uses default responses for nondescript objects
-		public bool IsNondescript		{ get; set; }  = false; 
-		public bool IsTakable			{ get; set; }  = false;
-		public bool IsOpenable			{ get; set; }  = false;
-		public bool IsContainer			{ get; set; }  = false;
-		public bool IsSwitch			{ get; set; }  = false;
-		public bool IsClothing			{ get; set; }  = false;
+		public bool IsNondescript		{ get; set; } = false; 
+		public bool IsTakable			{ get; set; } = false;
+		public bool IsOpenable			{ get; set; } = false;
+		public bool IsContainer			{ get; set; } = false;
+		public bool IsSwitch			{ get; set; } = false;
+		public bool IsClothing			{ get; set; } = false;
 		// whether certain sensory cmds are available
-		public bool IsReachable			{ get; set; }  = true; 
-		public bool IsClublikeWeapon	{ get; set; }  = false;
-		public bool IsBladeWeapon		{ get; set; }  = false;
+		public bool IsReachable			{ get; set; } = true; 
+		public bool IsClublikeWeapon	{ get; set; } = false;
+		public bool IsBladeWeapon		{ get; set; } = false;
+		// for takable objects and containers; the value is roughly in dm^3
+		public float Size				{ get; set; } = -1;
+		public float Capacity			{ get; set; } = -1;
+		public float SubObjectsSize => SubObjects.Sum(x => x.Size == -1 ? 0 : x.Size);
+		public Descriptor FullShortInfo { get; } = (s, v) =>
+		{
+			string ret = s.ShortInfo(s, v);
+			if (s.IsContainer)
+			{
+				var so = s.SubObjects.Where(x => x.IsTakable);
+				if (v.IsLight() && so.Any())
+					ret += $"（里面有{string.Join("、", so.Select(x => x.ShortInfo(x, v)))}）";
+				else if (v.IsLight())
+					ret += "（里面什么也没有）";
+				else ret += "（你看不清楚里面装了什么）";
+			}
+			return ret;
+		};
 
 		// door-likes
 		public bool IsEnterable			{ get; set; } = false;
@@ -100,12 +118,15 @@ namespace Advent
 		}
 
 		public AObject(string name, string[] alias, string desc, string ldesc = "", 
-			string info = "")
+			string info = "", string sinfo = "")
 		{
 			Name = name;
 			Alias = alias.ToList();
-			Information = (s, v) => info;
 			Description = (s, v) => desc;
+			if (!string.IsNullOrEmpty(info))
+				Information = (s, v) => info;
+			if (!string.IsNullOrEmpty(sinfo))
+				ShortInfo = (s, v) => sinfo;
 			if (string.IsNullOrEmpty(ldesc))
 				LightDescription = (s, v) => desc;
 			else
@@ -314,7 +335,10 @@ namespace Advent
 		}
 
 		public Area FindArea(string name)
-			=> Areas.Find(x => x.Name == name);
+			=> Areas.Find(x => x.Name == name) ?? throw new ArgumentException("invalid area");
+
+		public void ChangeArea(string name)
+			=> CurrentArea = FindArea(name);
 
 		public void ReplaceObjectInternal(string s, AObject newObj)
 			=> Objects[Objects.FindIndex((x) => x.Name == s)] = newObj;

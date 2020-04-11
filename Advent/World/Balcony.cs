@@ -27,8 +27,9 @@
 			AObject TrashBin = new AObject(
 				"垃圾桶", new[] { "桶", "垃圾" },
 				desc: 		"看上去黑漆漆的。",
-				ldesc: 		"一个套着垃圾袋的垃圾桶，里面没有任何东西。")
-			{ IsContainer = true };
+				ldesc: 		"一个套着垃圾袋的垃圾桶，里面没有任何东西。",
+				sinfo:		"一个垃圾桶")
+			{ IsTakable = true, IsContainer = true, Size = 30, Capacity = 20 };
 
 			AObject Darkness = new AObject(
 				"黑暗", new string[0],

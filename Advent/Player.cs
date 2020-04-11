@@ -8,22 +8,21 @@ namespace Advent
 {
 	public partial class Player
 	{
-		internal const string ErrDoNotKnowItem = "我不知道这是什么，请尝试不同的表达方法。\n\n";
-		internal const string NondescriptStr = "你没有看到任何特别之处。\n\n";
-
 		public PlayerVariables Variables { get; private set; }
 
-		private readonly List<KeyValuePair<string, Action<string>>> VerbTable;
+		private readonly Dictionary<string, Action<string>> SingleObjVerbs;
+		private readonly Dictionary<string, Action<string, string>> DoubleObjVerbs;
 
 		public Player()
 		{
 			Variables = new PlayerVariables(this);
 
-			var t = new Dictionary<string, Action<string>>
+			SingleObjVerbs = new Dictionary<string, Action<string>>
 			{
 				{ "等", Wait },
 
-				{ "把", ParseInversedCmd }, { "将", ParseInversedCmd },
+				{ "把", ParseInversedCmd }, { "将", ParseInversedCmd }, 
+				{ "用", ParseInversedCmd },
 
 				{ "穿衣", PutOnClothes }, {"穿上", PutOnClothes},
 				{ "脱衣", Undress}, { "脱下", Undress },
@@ -36,24 +35,28 @@ namespace Advent
 				{ "拧开", TurnOnOrOpen }, { "拉开", TurnOnOrOpen },
 				{ "打开", TurnOnOrOpen }, { "旋开", TurnOnOrOpen },
 				{ "开启", TurnOnOrOpen }, { "开", TurnOnOrOpen },
+
 				{ "关闭", TurnOffOrClose }, { "关上", TurnOffOrClose },
 				{ "关", TurnOffOrClose },
 
-				{ "拿起", Take }, { "拿走", Take}, {"拿", Take},
-				{ "取", Take}, {"取走", Take},
+				{ "拿起", Take }, { "拿走", Take}, { "拿", Take },
+				{ "取", Take }, { "取走", Take }, { "捉", Take }, { "捞", Take }, 
 
 				{ "看物品", Inventory }, { "物品", Inventory},
+
 				{ "看", LookAt }, { "观察", LookAt },
+
 				{ "检查", Examine },
 
-				// TODO: 闻 攻击 触摸
 				{ "闻", Smell }, { "触摸", Touch }, { "触碰", Touch },
 				{ "摸", Touch }, { "碰", Touch }, { "听", Listen }
+				// TODO: 砸 打 攻击
 			};
-			VerbTable = t.ToList();
-			// long verbs first to avoid confusion in Chinese
-			// e.g. 开启|手电筒 and 开|手电筒 but never 开|启手电筒
-			VerbTable.Sort((x, y) => y.Key.Length - x.Key.Length);
+
+			DoubleObjVerbs = new Dictionary<string, Action<string, string>>
+			{
+				{ "放进", PutIn }
+			};
 		}
 
 		public void StartGame()
@@ -93,7 +96,7 @@ namespace Advent
 			Print("\n[如有需要请调整控制台窗口大小并且重启程序]\n\n");
 			while (true)
 			{
-				string ans = Input("是否显示帮助？").ToLower();
+				string ans = Input("是否显示帮助？");
 				if (ans == "是")
 				{
 					foreach (var line in Properties.Resources.Help.Split(new[] { "\r\n\r\n" }, StringSplitOptions.None))

@@ -13,8 +13,14 @@ namespace AdventTest
 		{
 			foreach (Room room in GameMap.Rooms)
 			{
-				CollectionAssert.AllItemsAreUnique(
-					room.Objects.Select(x => x.Name).ToArray());
+				if (room.Areas.Count > 0) foreach (Area area in room.Areas)
+					CollectionAssert.AllItemsAreUnique(room.Objects
+						.Where(x => area.FilterObject(x) == ObjectVisibility.Visible)
+						.Select(x => x.Name).ToArray(), 
+						$"in {room.Name}, area {area.Name}");
+				else CollectionAssert.AllItemsAreUnique(
+					room.Objects.Select(x => x.Name).ToArray(),
+					$"in {room.Name}, no area");
 			}
 
 			// portable items are required to have unique names
@@ -27,16 +33,31 @@ namespace AdventTest
 		{
 			foreach (AObject obj in GameMap.Objects)
 			{
-				Assert.IsFalse(obj.OnTaking != AObject.DefaultHandler && !obj.IsTakable,
-					$"{obj.Name} failed #1");
 				Assert.IsFalse(obj.OnEntering != AObject.DefaultHandler && !obj.IsEnterable,
-					$"{obj.Name} failed #2");
+					$"{obj.Name} failed #1");
 				Assert.IsFalse((obj.OnOpening != AObject.DefaultHandler 
 					|| obj.OnClosing != AObject.DefaultHandler) && !obj.IsOpenable,
-					$"{obj.Name} failed #3");
+					$"{obj.Name} failed #2");
 				Assert.IsFalse((obj.OnTurningOn != AObject.DefaultHandler
 					|| obj.OnTurningOff != AObject.DefaultHandler) && !obj.IsSwitch,
-					$"{obj.Name} failed #4");
+					$"{obj.Name} failed #3");
+			}
+		}
+
+		[TestMethod]
+		public void ContainerValidalityTest()
+		{
+			foreach (AObject obj in GameMap.Objects)
+			{
+				Assert.IsFalse(
+					obj.ShortInfo != null && obj.Information != AObject.DefaultDescriptor, 
+					$"{obj.Name} failed #1");
+				Assert.IsTrue(
+					obj.IsContainer ^ obj.Capacity == -1, $"{obj.Name} failed #2");
+				Assert.IsTrue(
+					obj.IsTakable ^ obj.Size == -1, $"{obj.Name} failed #3");
+				Assert.IsTrue(
+					obj.IsTakable ^ obj.ShortInfo == null, $"{obj.Name} failed #4");
 			}
 		}
 

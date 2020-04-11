@@ -17,6 +17,7 @@ namespace Advent
 				"你只能在黑暗中看见大概的轮廓：衣柜，桌子，床铺（四张：你睡在靠窗的下铺），以及通向走廊和洗手间过道的两扇门。\n\n现在仅有的照明是从窗帘后透出的一点微光。";
 			Dormitory12.IsLit = false;
 
+			// FIXME: do better than this
 			AObject Clothes = new AObject(
 				"衣服", new[] { "衣物", "服装" },
 				desc: 	"杂乱堆着的衣服；在顶上有几件外套和外裤。",
@@ -44,18 +45,18 @@ namespace Advent
 
 			AObject Bottle = new AObject(
 				"水杯", new[] { "水瓶", "杯子", "瓶子", "保温杯" },
-				desc: 	"它的金属表面握起来凉凉的，晃一晃能感觉到里面还有一半水。",
-				ldesc: 	"它银色的金属表面光滑发亮，晃一晃能感觉到里面还有一半水。",
-				info:	"你的一个水杯放在这里。")
-			{ IsTakable = true };
+				desc: 	"它的金属表面握起来凉凉的。",
+				ldesc: 	"它银色的金属表面光滑发亮。",
+				sinfo:	"一个水杯")
+			{ IsTakable = true, Size = 2f };
 
 			AObject Flashlight = new AObject(
 				"手电筒", new[] { "手电", "电筒" },
 				desc: 	"简单的手电筒，然而设计得十分周到，在黑暗中还会发出一小圈荧光。",
 				ldesc: 	"一个闪亮的银色金属手电筒。这花了你不少钱，但是挺漂亮，照明范围也大。",
-				info:	"你的一个小手电筒放在这里。")
+				sinfo:	"一个小手电筒")
 			{
-				IsTakable = true, IsSwitch = true,
+				IsTakable = true, IsSwitch = true, Size = 0.5f,
 				OnTurningOn = (self, v) =>
 				{
 					if (!v.inventory.Contains(self))
@@ -99,14 +100,14 @@ namespace Advent
 				"空调遥控器", new[] { "遥控器" },
 				desc: 	"一团方块形状的空调遥控器，按键在黑暗中微弱地发光。",
 				ldesc: 	"方块形状的白色空调遥控器，侧面带着红色条纹。",
-				info:	"一个空调遥控器放在这里。")
-			{ IsTakable = true };
+				sinfo:	"一个空调遥控器")
+			{ IsTakable = true, Size = 0.3f };
 
 			AObject Desk = new AObject(
 				"桌子", new[] { "课桌", "桌椅" },
 				desc: 	"看上去漆黑一片，但是你知道自己的位置上有盏台灯，上面的格子里堆放着杂物。",
 				ldesc: 	"普通的桌子，从寝室一边的衣柜延伸到洗手间过道的门边。上面的格子里堆放着杂物。")
-			{ IsContainer = true };
+			{ IsContainer = true, Capacity = 100 };
 			Desk.SubObjects.AddRange(new[] { Bottle, Flashlight, ACControl });
 
 			AObject Lamp = new AObject(
@@ -124,6 +125,11 @@ namespace Advent
 					} else
 						Print("咔哒。没有反应。\n\n");
 					return HandleResult.Refused;
+				},
+				OnTaking = (self, v) =>
+				{
+					Print("那东西的电线一直连到桌下，很不方便移动。\n\n");
+					return HandleResult.Refused;
 				}
 			};
 
@@ -132,7 +138,7 @@ namespace Advent
 				desc: 	"看上去只是漆黑一片。",
 				ldesc: 	"床铺里面全都空无一人，被子随意铺开，就好像睡觉的人凭空消失了一样。床架、栏杆都非常完整，没有其他的痕迹。")
 			{
-				IsContainer = true,
+				IsContainer = true, Capacity = 300,
 				OnExaminaion = (self, v) =>
 				{
 					if (!v.foundNobody && (v.currentRoom.IsPlayerLit || v.currentRoom.IsLit))
@@ -152,6 +158,7 @@ namespace Advent
 				ldesc:	"普通而标准的寝室空调，发出制热模式低沉的呼吸声。两个绿点微弱地在面板上亮着。")
 			{
 				IsSwitch = true, SwitchState = true,
+				IsReachable = false,
 				OnTurningOn = (self, v) =>
 				{
 					if (!v.inventory.Contains(ACControl))

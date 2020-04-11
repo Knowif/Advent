@@ -26,13 +26,17 @@ namespace Advent
 		// Puts the software buffer on the screen after clearing.
 		public static void Flush()
 		{
-			string str = header + "\n";
+			string str = ""; // header + "\n";
 			for (int i = 0; i < buf.Length; i++)
 				if (i == buf.Length - 1)
 					str += padding + buf[i];
 				else
 					str += padding + buf[i] + "\n";
 			Console.Clear();
+			BackgroundColor = ConsoleColor.White;
+			ForegroundColor = ConsoleColor.Black;
+			WriteLine(header);
+			ResetColor();
 			Out.Write(str);
 			Out.Flush();
 		}
@@ -56,19 +60,11 @@ namespace Advent
 			int offset = WindowWidth / 2 - textlen / 2;
 			if (offset < 0) return;
 			header = "";
-			if (UnixColoring) header = "\x1b[7m";
 			for (int i = 0; i < offset; i++)
 				header += " ";
 			header += text;
 			for (int i = 0; i < WindowWidth - offset - textlen; i++)
 				header += " ";
-			if (UnixColoring) header += "\x1b[0m\n";
-			else
-			{
-				header += "\n";
-				for (int i = 0; i < WindowWidth; i++)
-					header += "_";
-			}
 		}
 
 		public static void PrintCentered(string text, bool emphasize = false)
@@ -160,9 +156,11 @@ namespace Advent
 		{
 			Print(prompt);
 			Flush();
-			if (UnixColoring) Write("\x1b[?25l");
+			//if (UnixColoring) Write("\x1b[?25l");
+			CursorVisible = false;
 			ReadKey();
-			if (UnixColoring) Write("\x1b[?25h");
+			CursorVisible = true;
+			//if (UnixColoring) Write("\x1b[?25h");
 		}
 
 		/// <summary>

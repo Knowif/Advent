@@ -40,7 +40,7 @@ namespace Advent
 			}
 
 			// as command ...
-			foreach (var x in VerbTable)
+			foreach (var x in SingleObjVerbs)
 				// FIXME: what System.StringComparison should be used?
 				if (cmd.StartsWith(x.Key, System.StringComparison.Ordinal))
 				{
@@ -59,10 +59,29 @@ namespace Advent
 
 		private void ParseInversedCmd(string p)
 		{
-			// BUGGY; DELETED
-
 			Print($"In ParseInversedCmd ... {p}\n\n");
-			return;
+			foreach (var v in DoubleObjVerbs)
+			{
+				if (p.Contains(v.Key))
+				{
+					int start = p.IndexOf(v.Key, System.StringComparison.Ordinal);
+					int end = start + v.Key.Length;
+					if (end != p.Length)
+					{
+						v.Value(p.Substring(0, start), p.Substring(end));
+						return;
+					}
+				}
+			}
+			foreach (var v in SingleObjVerbs)
+			{
+				if (p.EndsWith(v.Key, System.StringComparison.Ordinal))
+				{
+					v.Value(p.Substring(0, p.Length - v.Key.Length));
+					return;
+				}
+			}
+			Print("解析器无法处理这个句子。\n\n");
 		}
 
 		private void DealTemperature()
@@ -98,7 +117,7 @@ namespace Advent
 		private Room CRoom => Variables.currentRoom;
 		private Area CArea => Variables.currentRoom.CurrentArea;
 
-		public void DescribeRoom(bool showRoomName = true)
+		private void DescribeRoom(bool showRoomName = true)
 		{
 			if (showRoomName)
 			{
@@ -117,24 +136,27 @@ namespace Advent
 			else Print(CRoom.GetDescription(CRoom, Variables) + "\n\n");
 
 			bool hasObj = false;
-			foreach (var obj in CRoom.Objects)
+			foreach (var obj in CRoom.Objects) if (CArea == null 
+				|| CArea.FilterObject(obj) == ObjectVisibility.Visible)
 			{
-				if (CArea == null || CArea.FilterObject(obj) == ObjectVisibility.Visible)
+				string info = obj.Information(obj, Variables);
+				if (!string.IsNullOrEmpty(info))
 				{
-					string info = obj.Information(obj, Variables);
-					if (!string.IsNullOrEmpty(info))
-					{
-						Print(info);
-						hasObj = true;
-					}
+					Print(info);
+					hasObj = true;
 				}
 			}
 			if (hasObj) Print("\n\n");
+			var shortInfoObjs = CRoom.Objects
+				.Where(x =>  x.ShortInfo != null &&
+					(CArea == null || CArea.FilterObject(x) == ObjectVisibility.Visible))
+				.Select(x => x.FullShortInfo(x, Variables));
+			if (shortInfoObjs.Any()) Print($"这里{(hasObj ? "还" : "")}有{string.Join("、", shortInfoObjs)}。\n\n");
 
 			Print(CRoom.PostDescription(CRoom, Variables));
 		}
 
-		public void DescribeObject(AObject what)
+		private void DescribeObject(AObject what)
 		{
 			HandleResult res = CRoom.BeforeExaminaion(CRoom, Variables, what);
 			if (res == HandleResult.Continue)
@@ -152,17 +174,12 @@ namespace Advent
 			res = CRoom.PostExamination(CRoom, Variables, what);
 
 			// go on to provide information for all subobjects
-			bool hadSubInfo = false;
-			foreach (var subObj in what.SubObjects)
-			{
-				string info = subObj.Information(subObj, Variables);
-				if (string.IsNullOrEmpty(info))
-				{
-					Print(info);
-					hadSubInfo = true;
-				}
-			}
-			if (hadSubInfo) Print("\n\n");
+			var shortInfoObjs = what.SubObjects
+				.Where(x =>  x.ShortInfo != null &&
+					(CArea == null || CArea.FilterObject(x) == ObjectVisibility.Visible))
+				.Select(x => x.FullShortInfo(x, Variables));
+			if (shortInfoObjs.Any())
+				Print($"这里放着{string.Join("、", shortInfoObjs)}。\n\n");
 		}
 
 		private bool GoDirection(Direction dir)
@@ -359,20 +376,58 @@ namespace Advent
 			if (iobj == null) iobj = CRoom.FindObject(p, Variables);
 			if (iobj == null)
 			{
-				Print(ErrDoNotKnowItem);
+				Print($"我不知道{p}是什么，请尝试不同的表达方法。\n\n");
 				return null;
 			}
 			if (!iobj.IsReachable)
 			{
-				Print("你够不到它。\n\n");
+				Print($"你够不到{iobj.Name}。真是可惜。\n\n");
 				return null;
 			}
 			return iobj;
 		}
 
-		// VERBS
+		// DOUBLE OBJECT VERBS
 
-		public void Wait(string p)
+		private void PutIn(string a, string b)
+		{
+			AObject oa = FindSensoryObject(a);
+			AObject ob = FindSensoryObject(b);
+			if (oa == null || ob == null)
+				return;
+			if (!ob.IsContainer)
+			{
+				Print("你没法把东西放到那里面。\n\n");
+				return;
+			}
+			if (oa == ob)
+			{
+				Print("把一样东西放进自身的想法听上去很荒谬；仿佛在向自己炫耀学识一般，你思考：利用一些拓扑学的把戏，这种行为在四维空间中也许很容易做到……或者，你可以把它弄成一个克莱因瓶……算了。\n\n");
+				return;
+			}
+			// if the object is untakable, it'll pass here but complain when you take it
+			if (ob.Capacity - ob.SubObjectsSize < oa.Size)
+			{
+				Print($"看上去装不下：{(ob.Capacity < oa.Size ? $"对于{ob.Name}来说，{oa.Name}实在太大了。" : $"{ob.Name}里面已经装了太多东西。")}\n\n");
+				return;
+			}
+			// We're trying to ensure that in case the put-in action is simply absurd you don't end up still taking the item.
+			if (!Variables.inventory.Contains(oa))
+			{
+				Take(oa.Name);
+				if (!Variables.inventory.Contains(oa))
+					return; // failed taking object
+			}
+			// Now it's okay to put it in
+			Variables.inventory.Remove(oa);
+			ob.SubObjects.Add(oa);
+			oa.Parent = ob;
+			Print($"你把{oa.Name}放进了{ob.Name}。\n\n");
+		}
+
+		// SINGLE OBJECT VERBS
+
+		private void Wait(string p)
 		{
 			// We do nothing for now.
 			if (Variables.foundWatchStop)
@@ -381,7 +436,7 @@ namespace Advent
 				Print("时间流逝。\n\n");
 		}
 
-		public void PutOnClothes(string p)
+		private void PutOnClothes(string p)
 		{
 			if (Variables.withClothes)
 			{
@@ -404,7 +459,7 @@ namespace Advent
 			}
 		}
 
-		public void Undress(string p)
+		private void Undress(string p)
 		{
 			if (!Variables.withClothes)
 			{
@@ -417,17 +472,17 @@ namespace Advent
 			}
 		}
 
-		public void Take(string p)
+		private void Take(string p)
 		{
 			AObject obj = CRoom.FindObject(p, Variables);
 			if (obj == null)
-				Print(ErrDoNotKnowItem);
+				Print($"我不知道{p}是什么，请尝试不同的表达方法。\n\n");
+			else if (obj.OnTaking(obj, Variables) != HandleResult.Continue)
+				return;
 			else if (!obj.IsTakable)
-				Print("它不是你能拿起来的东西。\n\n");
+				Print($"{obj.Name}不像是你能拿起来的东西。\n\n");
 			else
 			{
-				if (obj.OnTaking(obj, Variables) != HandleResult.Continue)
-					return;
 				if (obj.Parent != null)
 				{
 					obj.Parent.SubObjects.Remove(obj);
@@ -439,7 +494,7 @@ namespace Advent
 			}
 		}
 
-		public void GoTo(string p)
+		private void GoTo(string p)
 		{
 			if (string.IsNullOrEmpty(p))
 			{
@@ -458,10 +513,10 @@ namespace Advent
 			}
 		}
 
-		public void GoOut(string p)
+		private void GoOut(string p)
 		{
 			if (!string.IsNullOrEmpty(p) && !CRoom.Alias.Contains(p) && CRoom.Name != p)
-				Print("你并不在" + p + "里，所以无法出去。\n\n");
+				Print($"你并不在{p}里，所以无法出去。\n\n");
 			else if (CArea?.DefaultDoor == null && CArea?.DefaultOutWay == null 
 					&& CRoom.DefaultDoor == null && CRoom.DefaultOutWay == null)
 				Print("你并不清楚应该如何出去。\n\n");
@@ -482,7 +537,7 @@ namespace Advent
 			}
 		}
 
-		public void TurnOnOrOpen(string p)
+		private void TurnOnOrOpen(string p)
 		{
 			if (string.IsNullOrEmpty(p))
 			{
@@ -490,29 +545,22 @@ namespace Advent
 				return;
 			}
 
-			//Doorway door = CRoom.GetDoorway(p);
-			//if (door != null)
-			//{
-			//	OpenDoor(door);
-			//	return;
-			//}
-
 			AObject iobj = Variables.InventoryGet(p);
 			AObject obj = CRoom.FindObject(p, Variables);
 
 			if (iobj != null)
 				TurnOnThing(iobj);
 			else if (obj == null)
-				Print(ErrDoNotKnowItem);
+				Print("我不知道这是什么，请尝试不同的表达方法。\n\n");
 			else if (!obj.IsSwitch && !obj.IsOpenable)
-				Print("这不是一个能够开关的东西。\n\n");
+				Print($"{obj.Name}不像是一个能够开关的东西。\n\n");
 			else if (obj.IsSwitch)
 				TurnOnThing(obj);
 			else if (obj.IsOpenable)
 				OpenThing(obj);
 		}
 
-		public void TurnOffOrClose(string p)
+		private void TurnOffOrClose(string p)
 		{
 			if (string.IsNullOrEmpty(p))
 			{
@@ -526,16 +574,16 @@ namespace Advent
 			if (iobj != null)
 				TurnOffThing(iobj);
 			else if (obj == null)
-				Print(ErrDoNotKnowItem);
+				Print("我不知道这是什么，请尝试不同的表达方法。\n\n");
 			else if (!obj.IsSwitch && !obj.IsOpenable)
-				Print("这不是一个能够开关的东西。\n\n");
+				Print($"{obj.Name}不像是一个能够开关的东西。\n\n");
 			else if (obj.IsSwitch)
 				TurnOffThing(obj);
 			else if (obj.IsOpenable)
 				CloseThing(obj);
 		}
 
-		public void LookAt(string p)
+		private void LookAt(string p)
 		{
 			AObject iobj = Variables.InventoryGet(p);
 			if (iobj != null)
@@ -547,7 +595,7 @@ namespace Advent
 				Examine(p);
 		}
 
-		public void Examine(string p)
+		private void Examine(string p)
 		{
 			AObject iobj = Variables.InventoryGet(p);
 			if (iobj != null)
@@ -555,12 +603,12 @@ namespace Advent
 
 			AObject obj = CRoom.FindObject(p, Variables);
 			if (obj == null)
-				Print(ErrDoNotKnowItem);
+				Print("我不知道这是什么，请尝试不同的表达方法。\n\n");
 			else
 				DescribeObject(obj);
 		}
 
-		public void Inventory(string p)
+		private void Inventory(string p)
 		{
 			if (Variables.inventory.Count == 0)
 				Print("你什么也没有带。\n\n");
@@ -573,7 +621,7 @@ namespace Advent
 			}
 		}
 
-		public void Touch(string p)
+		private void Touch(string p)
 		{
 			if (string.IsNullOrEmpty(p))
 			{
@@ -587,7 +635,7 @@ namespace Advent
 			Print(AObject.DefaultSensoryResponse + "\n\n");
 		}
 
-		public void Smell(string p)
+		private void Smell(string p)
 		{
 			if (string.IsNullOrEmpty(p))
 			{
@@ -600,7 +648,7 @@ namespace Advent
 				Print(AObject.DefaultSensoryResponse + "\n\n");
 		}
 
-		public void Listen(string p)
+		private void Listen(string p)
 		{
 			if (string.IsNullOrEmpty(p))
 			{

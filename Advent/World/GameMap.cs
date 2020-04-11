@@ -14,10 +14,10 @@ namespace Advent
 		public readonly static Room LobbyNo8 = new Room();
 
 		public readonly static Room Building1F1 = new Room();
-		//public static Room Building1F2 = new Room();
-		//public static Room Building1F3 = new Room();
-		//public static Room Building1F4 = new Room();
-		//public static Room Building1F5 = new Room();
+		public readonly static Room Building1F2 = new Room();
+		public static Room Building1F3 = new Room();
+		public static Room Building1F4 = new Room();
+		public static Room Building1F5 = new Room();
 		//public static Room Building1F6 = new Room();
 
 		public readonly static Room DarknessRoom = new Room();
@@ -28,7 +28,8 @@ namespace Advent
 		public readonly static Room[] Rooms = new Room[]
 		{
 			Dormitory12, Restroom, Balcony,
-			DormsHallway, LobbyNo8, Campus, Building1F1
+			DormsHallway, LobbyNo8, Campus, Building1F1,
+			Building1F2
 			// FIXME: should DarknessRoom be added?
 		};
 		public readonly static List<Area> Areas = new List<Area>();
