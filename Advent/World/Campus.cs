@@ -456,24 +456,20 @@ namespace Advent
 							{ { Direction.SE, EGym },
 							  { Direction.W, TriWGate } });
 
-			AObject doorEPlg = AObject.SimpleDoor(
-				dest: 		null,
-				name: 		"操场入口",
-				alias: 		new[] { "里面", "大门", "西", "入口", "操场" },
-				desc: 		"环绕操场的围栏在这边入口处打开。",
-				open: 		false, // TODO: open that!
-				locked: true);
-			doorEPlg.Information = doorEPlg.Description;
-			doorEPlg.IsOpenable = false;
-			Campus.Objects.Add(doorEPlg);
 			SetupArea(ref EPlg, "操场入口边",
-				desc: "你站在一条南北走向的大路上，操场的入口在你的西侧。另一边的道路直通向食堂[7#]。南边大路直通向篮球场。",
-				usable: new[] { Playground, Building5, doorEPlg },
+				desc: "你站在一条南北走向的大路上，另一边的道路直通向食堂[7#]，南边大路直通向篮球场。环绕操场的围栏在西边入口处打开。",
+				usable: new[] { Playground, Building5 },
 				notClear: new[] { BasketballCourt, Building6 },
 				godir: new Dictionary<Direction, Area>
 							{ { Direction.E, TriWS1Rd },
 							  { Direction.N, A5tPlg },
 							  { Direction.S, TriWGate } });
+			EPlg.RoomTo.Add(Direction.W, GameMap.Playground);
+			EPlg.OnGoDirection = (s, v, d) =>
+			{
+				GameMap.Playground.ChangeArea("入口处的空地");
+				return HandleResult.Continue;
+			};
 
 			AObject doorA5tPlg = AObject.SimpleDoor(
 				dest: 		null,
@@ -509,23 +505,19 @@ namespace Advent
 							  { Direction.N, EPlg },
 							  { Direction.S, W6 } });
 
-			AObject doorRdWGate = AObject.SimpleDoor(
-				dest: 		null,
-				name: 		"操场南侧入口",
-				alias: 		new[] { "里面", "大门", "北", "入口", "操场" },
-				desc: 		"北边，一个侧面入口通向操场观众席的露天斜坡。",
-				open: 		false, // TODO: should be true
-				locked: true);
-			doorRdWGate.Information = doorRdWGate.Description;
-			doorRdWGate.IsOpenable = false;
-			Campus.Objects.Add(doorRdWGate);
 			SetupArea(ref RdWGate, "通向学校西门的道路",
 				desc: "你站在足球场和篮球场之间的路上，西边通往你通常在那里搭校车回家的西门，但此刻——虽然有路灯和天空的亮光照耀——那里只是一片令人不寒而栗的黑暗。你也可以从东面退回学校。",
-				usable: new[] { doorRdWGate },
+				usable: new AObject[0],
 				notClear: new[] { Playground, BasketballCourt },
 				godir: new Dictionary<Direction, Area>
 							{ { Direction.W, TriFrWGate },
 							  { Direction.E, TriWGate } });
+			RdWGate.RoomTo.Add(Direction.N, GameMap.Playground);
+			RdWGate.OnGoDirection = (s, v, d) =>
+			{
+				GameMap.Playground.ChangeArea("观众席末端平台");
+				return HandleResult.Continue;
+			};
 
 			SetupArea(ref TriFrWGate, "西门前的三岔路口",
 				desc: "你站在足球场和篮球场之间道路上的尽头，西边（那里原本是学校西门）紧邻着一片令人不寒而栗的黑暗。道路向东面延伸退回学校，另有一条小路在北面分岔到操场后面。",

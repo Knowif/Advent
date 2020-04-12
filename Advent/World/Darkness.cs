@@ -29,6 +29,8 @@
 				v.stopReason = "darkness";
 				return desc;
 			};
+
+			DarknessArea.FilterObject = x => ObjectVisibility.NotVisible;
 		}
 	}
 }

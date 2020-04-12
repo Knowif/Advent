@@ -38,6 +38,8 @@ namespace Advent
 
 		static GameMap()
 		{
+			Interactive.Print("正在建构世界……");
+			Interactive.Flush();
 			BuildCommons();
 			BuildDarkness();
 			BuildDormitory12();
@@ -48,6 +50,8 @@ namespace Advent
 			BuildCampus();
 			BuildPlayground();
 			BuildBuilding1();
+			Interactive.Print("完成。\n\n");
+			Interactive.Flush();
 
 			// build list of everything
 			foreach (Room r in Rooms)

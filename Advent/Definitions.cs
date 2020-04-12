@@ -216,7 +216,6 @@ namespace Advent
 		public Direction? DefaultOutWay  { get; set; }
 
 		public Handler OnExamination			{ get; set; } = DefaultHandler;
-		public CmdHandler OnQueryingObject		{ get; set; } = DefaultCmdHandler;
 		public CmdHandler BeforeCommand			{ get; set; } = DefaultCmdHandler;
 		public CmdHandler PostCommand			{ get; set; } = DefaultCmdHandler;
 		public DirHandler OnGoDirection			{ get; set; } = DefaultDirHandler;
@@ -298,33 +297,28 @@ namespace Advent
 
 		public AObject FindObject(string name, PlayerVariables v)
 		{
-			if (CurrentArea == null
-				|| CurrentArea.OnQueryingObject(CurrentArea, v, name) == HandleResult.Continue)
+			List<AObject> matches = new List<AObject>();
+			foreach (var obj in Objects)
 			{
+				if (CurrentArea != null && CurrentArea.FilterObject(obj) == ObjectVisibility.NotVisible)
+					continue;
+				if (obj.Name == name || obj.Alias.Contains(name))
+					matches.Add(obj);
+				FindSubObjectIn(obj, name, matches);
+			}
 
-				List<AObject> matches = new List<AObject>();
-				foreach (var obj in Objects)
-				{
-					if (CurrentArea != null && CurrentArea.FilterObject(obj) == ObjectVisibility.NotVisible)
-						continue;
-					if (obj.Name == name || obj.Alias.Contains(name))
-						matches.Add(obj);
-					FindSubObjectIn(obj, name, matches);
-				}
-
-				if (matches.Count > 1)
-				{
-					Print("你所说的“" + name + "”引起了歧义，它可以指：\n");
-					foreach (var match in matches)
-						Print(" * " + match.Name + "\n");
-				} else if (matches.Count == 1)
-				{
-					if (CurrentArea != null
-							&& CurrentArea.FilterObject(matches[0]) == ObjectVisibility.Unclear)
-						Print("你在远处只能隐约看见它的剪影。\n\n");
-					else
-						return matches[0];
-				}
+			if (matches.Count > 1)
+			{
+				Print("你所说的“" + name + "”引起了歧义，它可以指：\n");
+				foreach (var match in matches)
+					Print(" * " + match.Name + "\n");
+			} else if (matches.Count == 1)
+			{
+				if (CurrentArea != null
+						&& CurrentArea.FilterObject(matches[0]) == ObjectVisibility.Unclear)
+					Print("你在远处只能隐约看见它的剪影。\n\n");
+				else
+					return matches[0];
 			}
 			return null;
 		}
