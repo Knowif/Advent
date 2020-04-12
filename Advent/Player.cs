@@ -42,6 +42,9 @@ namespace Advent
 				{ "拿起", Take }, { "拿走", Take}, { "拿", Take },
 				{ "取", Take }, { "取走", Take }, { "捉", Take }, { "捞", Take }, 
 
+				{ "放下", Drop }, { "扔下", Drop }, { "丢下", Drop },
+				{ "扔", Drop }, { "丢", Drop },
+
 				{ "看物品", Inventory }, { "物品", Inventory},
 
 				{ "看", LookAt }, { "观察", LookAt },
@@ -55,7 +58,7 @@ namespace Advent
 
 			DoubleObjVerbs = new Dictionary<string, Action<string, string>>
 			{
-				{ "放进", PutIn }
+				{ "放进", PutIn }, { "放上", PutIn }
 			};
 		}
 

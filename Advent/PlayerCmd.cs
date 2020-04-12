@@ -135,6 +135,8 @@ namespace Advent
 			if (!string.IsNullOrEmpty(areadesc)) Print(areadesc + "\n\n");
 			else Print(CRoom.GetDescription(CRoom, Variables) + "\n\n");
 
+			Print(CRoom.PostDescription(CRoom, Variables));
+
 			bool hasObj = false;
 			foreach (var obj in CRoom.Objects) if (CArea == null 
 				|| CArea.FilterObject(obj) == ObjectVisibility.Visible)
@@ -152,8 +154,6 @@ namespace Advent
 					(CArea == null || CArea.FilterObject(x) == ObjectVisibility.Visible))
 				.Select(x => x.FullShortInfo(x, Variables));
 			if (shortInfoObjs.Any()) Print($"这里{(hasObj ? "还" : "")}有{string.Join("、", shortInfoObjs)}。\n\n");
-
-			Print(CRoom.PostDescription(CRoom, Variables));
 		}
 
 		private void DescribeObject(AObject what)
@@ -474,6 +474,12 @@ namespace Advent
 
 		private void Take(string p)
 		{
+			if (string.IsNullOrEmpty(p))
+			{
+				Print("请说明要拿的是什么。\n\n");
+				return;
+			}
+
 			AObject obj = CRoom.FindObject(p, Variables);
 			if (obj == null)
 				Print($"我不知道{p}是什么，请尝试不同的表达方法。\n\n");
@@ -491,6 +497,28 @@ namespace Advent
 					CRoom.Objects.Remove(obj);
 				Variables.inventory.Add(obj);
 				Print("拿到了。\n\n");
+			}
+		}
+
+		private void Drop(string p)
+		{
+			if (string.IsNullOrEmpty(p))
+			{
+				Print("请说明要放下的是什么。\n\n");
+				return;
+			}
+
+			AObject obj = Variables.InventoryGet(p);
+			AObject obj2 = CRoom.FindObject(p, Variables);
+			if (obj == null && obj2 == null)
+				Print($"我不知道{p}是什么，请尝试不同的表达方法。\n\n");
+			else if (obj == null)
+				Print($"你还没有拿到它。");
+			else
+			{
+				// FIXME: doesn't work in multiarea rooms with ruled visibility
+				Variables.inventory.Remove(obj);
+				CRoom.Objects.Add(obj);
 			}
 		}
 

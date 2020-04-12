@@ -179,36 +179,35 @@ namespace Advent
 				flopside: 	() => LobbyNo8.FindObjectInternal("外面"));
 			Campus.Objects.Add(doorA7t8);
 			SetupArea(ref A7t8, "食堂和寝室楼之间",
-				desc: 		"你站在食堂[7#]与你的寝室楼[8#]之间的空地上。东侧的远处围栏前停着几辆车。西侧通往一个小广场，几棵灰暗的大树后面显示出体育馆高大的影子。",
-				usable: 	new[] { Building7, Building8, doorA7t8 },
-				notClear: 	new[] { Building6 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在食堂[7#]与你的寝室楼[8#]之间的空地上。东侧的远处围栏前停着几辆车。西侧通往一个小广场，几棵灰暗的大树后面显示出体育馆高大的影子。",
+				usable: new[] { Building7, Building8, doorA7t8 },
+				notClear: new[] { Building6 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.W, HiSq },
-							  { Direction.E, EA7t8} },
-				noDesc: 		new[] { "车", "树", "影子" });
+							  { Direction.E, EA7t8} });
 
 			SetupArea(ref HiSq, "寝室楼前的小广场",
-				desc: 		"你站在小广场的树下，浓荫掩蔽了光线，南边周围是一大片花坛。这里还属于“高地”，所以去北侧的行政楼[1#]就要走下台阶。西侧就是体育馆[6#]，入口前有一个小池塘；在东边你能望见食堂[7#]和8#寝室楼。女生寝室楼[10#, 11#]在南边，还要上一段台阶才能走到。",
-				usable: 	new[] { Building6, Building8, Flower },
-				notClear: 	new[] { Building1, Building7, GymPond },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在小广场的树下，浓荫掩蔽了光线，南边周围是一大片花坛。这里还属于“高地”，所以去北侧的行政楼[1#]就要走下台阶。西侧就是体育馆[6#]，入口前有一个小池塘；在东边你能望见食堂[7#]和8#寝室楼。女生寝室楼[10#, 11#]在南边，还要上一段台阶才能走到。",
+				usable: new[] { Building6, Building8, Flower },
+				notClear: new[] { Building1, Building7, GymPond },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.E, A7t8 },
 							  { Direction.W, EGym },
 							  { Direction.N, FrHiSq },
 							  { Direction.S, BkHiSq } });
 
 			SetupArea(ref BkHiSq, "台阶",
-				desc: 		"你站在花坛之间的台阶上，被雾中漂浮的不明确微细枝条所包围。北边立着小广场中间巨大的树。花坛的小路之外，四幢寝室楼在南面和东面形成半包围的结构。",
-				usable: 	new[] { Building1, Building7, Flower },
-				notClear: 	new[] { Building6, Building8, Building10, GymPond },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在花坛之间的台阶上，被雾中漂浮的不明确微细枝条所包围。北边立着小广场中间巨大的树。花坛的小路之外，四幢寝室楼在南面和东面形成半包围的结构。",
+				usable: new[] { Building1, Building7, Flower },
+				notClear: new[] { Building6, Building8, Building10, GymPond },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.N, HiSq } });
 
 			SetupArea(ref FrHiSq, "台阶",
-				desc: 		"你站在连接学校南北两部分的台阶上，向北面对行政楼[1#]，向南面对小广场。广场中央那棵巨大的树在这里看上去像一枚在雾霭中漂浮的榛子。",
-				usable: 	new[] { Building1, Building7 },
-				notClear: 	new[] { Building6 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在连接学校南北两部分的台阶上，向北面对行政楼[1#]，向南面对小广场。广场中央那棵巨大的树在这里看上去像一枚在雾霭中漂浮的榛子。",
+				usable: new[] { Building1, Building7 },
+				notClear: new[] { Building6 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.S, HiSq },
 							  { Direction.N, S1Rd } });
 
@@ -226,21 +225,20 @@ namespace Advent
 			};
 			Campus.Objects.Add(doorS1Rd);
 			SetupArea(ref S1Rd, "道路",
-				desc: 		"你站在一条东西走向的大路上。这条路很长；顺着西边望去能看见操场，东边的另一头能看见食堂[7#]。北边侧对着行政楼[1#]入口，南边有台阶通向高地，那里有寝室和体育馆。你也可以向东北拐到行政楼[1#]和外事公寓[4#]之间。在你的头顶上方，树荫遮住了一半天空，紫红色的微光从树叶缝隙里漏下来。西端体育馆那边的墙上爬着稀疏的藤蔓。",
-				usable: 	new[] { Building1, Building7, doorS1Rd },
-				notClear: 	new[] { Building6 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在一条东西走向的大路上。这条路很长；顺着西边望去能看见操场，东边的另一头能看见食堂[7#]。北边侧对着行政楼[1#]入口，南边有台阶通向高地，那里有寝室和体育馆。你也可以向东北拐到行政楼[1#]和外事公寓[4#]之间。在你的头顶上方，树荫遮住了一半天空，紫红色的微光从树叶缝隙里漏下来。西端体育馆那边的墙上爬着稀疏的藤蔓。",
+				usable: new[] { Building1, Building7, doorS1Rd },
+				notClear: new[] { Building6 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.S, FrHiSq },
 							  { Direction.W, TriWS1Rd },
 							  { Direction.E, Fr7 },
-							  { Direction.NE, A1t4 } },
-				noDesc: 		new[] { "藤蔓", "树" });
+							  { Direction.NE, A1t4 } });
 
 			SetupArea(ref TriWS1Rd, "三岔路口",
-				desc: 		"你站在一条东西走向的大路上，西边延伸直到操场，东边的另一头延伸直到食堂[7#]。这个路口的北侧在行政楼[1#]和国际部[5#]之间分出一条过道。",
-				usable: 	new[] { Building1, Building5 },
-				notClear: 	new[] { Building6 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在一条东西走向的大路上，西边延伸直到操场，东边的另一头延伸直到食堂[7#]。这个路口的北侧在行政楼[1#]和国际部[5#]之间分出一条过道。",
+				usable: new[] { Building1, Building5 },
+				notClear: new[] { Building6 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.E, S1Rd },
 							  { Direction.W, EPlg },
 							  { Direction.N, A1t5 } });
@@ -262,10 +260,10 @@ namespace Advent
 			Campus.Objects.Add(doorA1t5_1);
 			Campus.Objects.Add(doorA1t5_2);
 			SetupArea(ref A1t5, "行政楼侧面",
-				desc: 		"你站在行政楼[1#]和国际部[5#]之间的道路上。北边是初中教学楼[3#]下的空地，南边通向一条东西走向的大路。5#楼的大门在你西侧；东边有一个1#楼的侧门。",
-				usable: 	new[] { Building1, Building5, doorA1t5_1, doorA1t5_2 },
-				notClear: 	new[] { Building3 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在行政楼[1#]和国际部[5#]之间的道路上。北边是初中教学楼[3#]下的空地，南边通向一条东西走向的大路。5#楼的大门在你西侧；东边有一个1#楼的侧门。",
+				usable: new[] { Building1, Building5, doorA1t5_1, doorA1t5_2 },
+				notClear: new[] { Building3 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.S, TriWS1Rd },
 							  { Direction.N, A3t5 } });
 
@@ -286,10 +284,10 @@ namespace Advent
 			Campus.Objects.Add(doorA1t4_1);
 			Campus.Objects.Add(doorA1t4_2);
 			SetupArea(ref A1t4, "行政楼侧面",
-				desc: 		"你站在行政楼[1#]和外事公寓[4#]之间的道路上。北边是高中教学楼[2#]和报告厅附近的空地，西南通向一条东西走向的大路，东南通向食堂一带。4#楼的大门在你东侧；西边有一个1#楼的侧门。",
-				usable: 	new[] { Building1, Building4, doorA1t4_1, doorA1t4_2 },
-				notClear: 	new[] { Building2 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在行政楼[1#]和外事公寓[4#]之间的道路上。北边是高中教学楼[2#]和报告厅附近的空地，西南通向一条东西走向的大路，东南通向食堂一带。4#楼的大门在你东侧；西边有一个1#楼的侧门。",
+				usable: new[] { Building1, Building4, doorA1t4_1, doorA1t4_2 },
+				notClear: new[] { Building2 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.SW, S1Rd },
 							  { Direction.SE, Fr7 },
 							  { Direction.N, A2t4 } });
@@ -303,10 +301,10 @@ namespace Advent
 				locked: true);
 			Campus.Objects.Add(doorA3t5);
 			SetupArea(ref A3t5, "教学楼侧面",
-				desc: 		"你站在初中教学楼[3#]和国际部[5#]之间宽阔的道路上；这里更像一块供人来往活动的空地。西边通向一条操场边南北走向的大路。在东边，教学楼三、四楼的天桥从你的上方经过进入行政楼[1#]；你可以向东从天桥下走向教学楼间的广场。南边有一条路通往行政楼[1#]和国际部[5#]之间。",
-				usable: 	new[] { Building3, Building5, doorA3t5 },
-				notClear: 	new[] { Building1 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在初中教学楼[3#]和国际部[5#]之间宽阔的道路上；这里更像一块供人来往活动的空地。西边通向一条操场边南北走向的大路。在东边，教学楼三、四楼的天桥从你的上方经过进入行政楼[1#]；你可以向东从天桥下走向教学楼间的广场。南边有一条路通往行政楼[1#]和国际部[5#]之间。",
+				usable: new[] { Building3, Building5, doorA3t5 },
+				notClear: new[] { Building1 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.S, A1t5 },
 							  { Direction.E, LoSq } });
 
@@ -340,11 +338,11 @@ namespace Advent
 			Campus.Objects.Add(doorLoSq_2);
 			Campus.Objects.Add(doorLoSq_3);
 			SetupArea(ref LoSq, "教学楼间的小广场",
-				desc: 		"你在教学楼间平坦的广场上，无树的夜晚天空广阔地显现在你的头顶，投下奇异的光照。旗杆是这里唯一高的事物；你注意到上面没有旗帜。行政楼的正门在广场的南面；向西、向东分别可以从三、四楼的天桥下走向初中、高中教学楼的侧门；当然，广场前部侧面的教学楼正门也可进入。",
-				usable: 	new[] { Building1, Building2, Building3, doorLoSq_1, doorLoSq_2, 
+				desc: "你在教学楼间平坦的广场上，无树的夜晚天空广阔地显现在你的头顶，投下奇异的光照。旗杆是这里唯一高的事物；你注意到上面没有旗帜。行政楼的正门在广场的南面；向西、向东分别可以从三、四楼的天桥下走向初中、高中教学楼的侧门；当然，广场前部侧面的教学楼正门也可进入。",
+				usable: new[] { Building1, Building2, Building3, doorLoSq_1, doorLoSq_2,
 					doorLoSq_3, SquarePond },
-				notClear: 	new AObject[0],
-				godir: 		new Dictionary<Direction, Area>
+				notClear: new AObject[0],
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.W, A3t5 },
 							  { Direction.E, A2t4 } });
 
@@ -357,10 +355,10 @@ namespace Advent
 				locked: true);
 			Campus.Objects.Add(doorA2t4);
 			SetupArea(ref A2t4, "教学楼侧面",
-				desc: 		"你站在高中教学楼[2#]和外事公寓[4#]之间宽阔的道路上；这里更像一块供人来往活动的空地。东侧不远处你能看见高中楼一楼附带的报告厅及其入口的方块形状（入口在外面）；再往东就到了围墙附近。在西边，教学楼三、四楼的天桥从你的上方经过进入行政楼[1#]；你可以向西从天桥下走向教学楼间的广场。南边有一条路通往行政楼[1#]和外事公寓[4#]之间。",
-				usable: 	new[] { Building2, Building5, ReportHall, doorA2t4 },
-				notClear: 	new[] { Building1 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在高中教学楼[2#]和外事公寓[4#]之间宽阔的道路上；这里更像一块供人来往活动的空地。东侧不远处你能看见高中楼一楼附带的报告厅及其入口的方块形状（入口在外面）；再往东就到了围墙附近。在西边，教学楼三、四楼的天桥从你的上方经过进入行政楼[1#]；你可以向西从天桥下走向教学楼间的广场。南边有一条路通往行政楼[1#]和外事公寓[4#]之间。",
+				usable: new[] { Building2, Building5, ReportHall, doorA2t4 },
+				notClear: new[] { Building1 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.S, A1t4 },
 							  { Direction.E, FrRepHl },
 							  { Direction.W, LoSq } });
@@ -374,10 +372,10 @@ namespace Advent
 				locked: true);
 			Campus.Objects.Add(doorFrRepHl);
 			SetupArea(ref FrRepHl, "报告厅入口",
-				desc: 		"你站在高中楼一楼报告厅的入口附近，高中教学楼[2#]外的空地中。外事公寓[4#]在你的南边显现出侧面；东边通往围墙边的道路。你也可以向西朝教学楼入口那边行走。",
-				usable: 	new[] { Building2, Building5, ReportHall, doorFrRepHl },
-				notClear: 	new[] { Building4 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在高中楼一楼报告厅的入口附近，高中教学楼[2#]外的空地中。外事公寓[4#]在你的南边显现出侧面；东边通往围墙边的道路。你也可以向西朝教学楼入口那边行走。",
+				usable: new[] { Building2, Building5, ReportHall, doorFrRepHl },
+				notClear: new[] { Building4 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.W, A2t4 },
 							  { Direction.E, ERepHl } });
 
@@ -390,37 +388,37 @@ namespace Advent
 				locked: true);
 			Campus.Objects.Add(doorFr7);
 			SetupArea(ref Fr7, "食堂前的大路",
-				desc: 		"你站在一条东西走向的大路上。你的南边是食堂[7#]的台阶和大门，在夜里看上去是比天色更为黑暗的一团方块；北边，外事公寓[4#]以其侧面阻挡了你的视线。西边，道路直通向操场方向；你也可以向东到达一个三岔路口，或者向西北拐到4#楼的另一面。",
-				usable: 	new[] { Building4, Building7, doorFr7 },
-				notClear: 	new[] { Building1 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在一条东西走向的大路上。你的南边是食堂[7#]的台阶和大门，在夜里看上去是比天色更为黑暗的一团方块；北边，外事公寓[4#]以其侧面阻挡了你的视线。西边，道路直通向操场方向；你也可以向东到达一个三岔路口，或者向西北拐到4#楼的另一面。",
+				usable: new[] { Building4, Building7, doorFr7 },
+				notClear: new[] { Building1 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.W, S1Rd },
 							  { Direction.E, TriEGate },
 							  { Direction.NW, A1t4 } });
 
 			SetupArea(ref TriEGate, "东门边的三岔路口",
-				desc: 		"你站在一条东西走向的大路的尽头，东边本应是学校的侧门，但此刻——虽然有路灯和天空的亮光照耀——那里只是一片令人不寒而栗的黑暗。南北两面各有围墙边的道路环绕学校；你也可以从西面走到食堂[7#]和外事公寓[4#]之间。",
-				usable: 	new[] { Building7 },
-				notClear: 	new[] { Building4 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在一条东西走向的大路的尽头，东边本应是学校的侧门，但此刻——虽然有路灯和天空的亮光照耀——那里只是一片令人不寒而栗的黑暗。南北两面各有围墙边的道路环绕学校；你也可以从西面走到食堂[7#]和外事公寓[4#]之间。",
+				usable: new[] { Building7 },
+				notClear: new[] { Building4 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.W, Fr7 },
 							  { Direction.E, DarknessArea },
 							  { Direction.N, ERepHl },
 							  { Direction.S, EA7t8 } });
 
 			SetupArea(ref EA7t8, "围墙边的道路",
-				desc: 		"你站在一条南北走向的道路上，东边紧靠学校的围墙。西边，食堂[7#]和8#寝室楼之间有大路直通向寝室楼前的小广场。围墙外只有一片超现实、不透明的黑暗。",
-				usable: 	new AObject[0],
-				notClear: 	new[] { Building7, Building8 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在一条南北走向的道路上，东边紧靠学校的围墙。西边，食堂[7#]和8#寝室楼之间有大路直通向寝室楼前的小广场。围墙外只有一片超现实、不透明的黑暗。",
+				usable: new AObject[0],
+				notClear: new[] { Building7, Building8 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.N, TriEGate },
 							  { Direction.W, A7t8 } });
 
 			SetupArea(ref ERepHl, "围墙边的道路",
-				desc: 		"你站在一条南北走向的道路上，东边紧靠学校的围墙。西边，高中教学楼[2#]报告厅和食堂之间分岔出一块空地直通向行政楼[1#]一带。东边的围墙外只有一片超现实、不透明的黑暗。",
-				usable: 	new AObject[0],
-				notClear: 	new[] { Building4, ReportHall, Building2 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在一条南北走向的道路上，东边紧靠学校的围墙。西边，高中教学楼[2#]报告厅和食堂之间分岔出一块空地直通向行政楼[1#]一带。东边的围墙外只有一片超现实、不透明的黑暗。",
+				usable: new AObject[0],
+				notClear: new[] { Building4, ReportHall, Building2 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.S, TriEGate },
 							  { Direction.W, FrRepHl } });
 			// TODO: a few cars
@@ -434,10 +432,10 @@ namespace Advent
 				locked: true);
 			Campus.Objects.Add(doorEGym);
 			SetupArea(ref EGym, "体育馆边",
-				desc: 		"你站在体育馆边上。小广场在你东侧，西边则是体育馆[6#]的侧门；门前有一个长方形池塘。你也可以往西北绕过侧门来到正门前的平地上，或是向南绕过花坛边缘，那边远处是一排寝室楼。",
-				usable: 	new[] { Building6, GymPond, doorEGym },
-				notClear: 	new[] { Building7, Building8, Building9, Building10, Flower },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在体育馆边上。小广场在你东侧，西边则是体育馆[6#]的侧门；门前有一个长方形池塘。你也可以往西北绕过侧门来到正门前的平地上，或是向南绕过花坛边缘，那边远处是一排寝室楼。",
+				usable: new[] { Building6, GymPond, doorEGym },
+				notClear: new[] { Building7, Building8, Building9, Building10, Flower },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.E, HiSq },
 							  { Direction.NW, FrGym },
 							  { Direction.S, SE6Brg } });
@@ -451,10 +449,10 @@ namespace Advent
 				locked: true);
 			Campus.Objects.Add(doorFrGym);
 			SetupArea(ref FrGym, "体育馆前的平台",
-				desc: 		"你站在体育馆[6#]前的平台上。这是石板铺成的一大块平地，北边的栏杆之外，你能看见行政楼[1#]和5#楼，它们处于低地，那边无法直接走上来。平地的西边有台阶下去通向大路，路的另一边就是操场和篮球场。你也可以向东南走到体育馆[6#]东边的侧门处，小广场附近。",
-				usable: 	new[] { Building6, doorFrGym },
-				notClear: 	new[] { Building1, Building5 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在体育馆[6#]前的平台上。这是石板铺成的一大块平地，北边的栏杆之外，你能看见行政楼[1#]和5#楼，它们处于低地，那边无法直接走上来。平地的西边有台阶下去通向大路，路的另一边就是操场和篮球场。你也可以向东南走到体育馆[6#]东边的侧门处，小广场附近。",
+				usable: new[] { Building6, doorFrGym },
+				notClear: new[] { Building1, Building5 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.SE, EGym },
 							  { Direction.W, TriWGate } });
 
@@ -469,10 +467,10 @@ namespace Advent
 			doorEPlg.IsOpenable = false;
 			Campus.Objects.Add(doorEPlg);
 			SetupArea(ref EPlg, "操场入口边",
-				desc: 		"你站在一条南北走向的大路上，操场的入口在你的西侧。另一边的道路直通向食堂[7#]。南边大路直通向篮球场。",
-				usable: 	new[] { Playground, Building5, doorEPlg },
-				notClear: 	new[] { BasketballCourt, Building6 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在一条南北走向的大路上，操场的入口在你的西侧。另一边的道路直通向食堂[7#]。南边大路直通向篮球场。",
+				usable: new[] { Playground, Building5, doorEPlg },
+				notClear: new[] { BasketballCourt, Building6 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.E, TriWS1Rd },
 							  { Direction.N, A5tPlg },
 							  { Direction.S, TriWGate } });
@@ -486,26 +484,26 @@ namespace Advent
 				locked: true);
 			Campus.Objects.Add(doorA5tPlg);
 			SetupArea(ref A5tPlg, "操场边的道路",
-				desc: 		"你站在一条南北走向的道路上，西边围栏之外就是操场，东边面对国际部[5#]大楼的后门。",
-				usable: 	new[] { Playground, Building5, doorA5tPlg },
-				notClear: 	new AObject[0],
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在一条南北走向的道路上，西边围栏之外就是操场，东边面对国际部[5#]大楼的后门。",
+				usable: new[] { Playground, Building5, doorA5tPlg },
+				notClear: new AObject[0],
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.S, EPlg },
 							  { Direction.N, NA5tPlg } });
 
 			SetupArea(ref NA5tPlg, "操场边的道路",
-				desc: 		"你站在一条南北走向的道路上，西边围栏之外就是操场，东边在初中教学楼[3#]和国际部[5#]之间分岔出一条大路。",
-				usable: 	new[] { Playground, Building5 },
-				notClear: 	new AObject[0],
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在一条南北走向的道路上，西边围栏之外就是操场，东边在初中教学楼[3#]和国际部[5#]之间分岔出一条大路。",
+				usable: new[] { Playground, Building5 },
+				notClear: new AObject[0],
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.S, A5tPlg },
 							  { Direction.E, A3t5 } });
 
 			SetupArea(ref TriWGate, "岔路口",
-				desc: 		"你站在一条南北走向的大路上，西边在足球场和篮球场之间分出另一条路通向学校西门，东边有一条坡道通往体育馆前的空地。",
-				usable: 	new[] { Building6, Playground, BasketballCourt },
-				notClear: 	new AObject[0],
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在一条南北走向的大路上，西边在足球场和篮球场之间分出另一条路通向学校西门，东边有一条坡道通往体育馆前的空地。",
+				usable: new[] { Building6, Playground, BasketballCourt },
+				notClear: new AObject[0],
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.E, FrGym },
 							  { Direction.W, RdWGate },
 							  { Direction.N, EPlg },
@@ -522,18 +520,18 @@ namespace Advent
 			doorRdWGate.IsOpenable = false;
 			Campus.Objects.Add(doorRdWGate);
 			SetupArea(ref RdWGate, "通向学校西门的道路",
-				desc: 		"你站在足球场和篮球场之间的路上，西边通往你通常在那里搭校车回家的西门，但此刻——虽然有路灯和天空的亮光照耀——那里只是一片令人不寒而栗的黑暗。你也可以从东面退回学校。",
-				usable: 	new[] { doorRdWGate },
-				notClear: 	new[] { Playground, BasketballCourt },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在足球场和篮球场之间的路上，西边通往你通常在那里搭校车回家的西门，但此刻——虽然有路灯和天空的亮光照耀——那里只是一片令人不寒而栗的黑暗。你也可以从东面退回学校。",
+				usable: new[] { doorRdWGate },
+				notClear: new[] { Playground, BasketballCourt },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.W, TriFrWGate },
 							  { Direction.E, TriWGate } });
 
 			SetupArea(ref TriFrWGate, "西门前的三岔路口",
-				desc: 		"你站在足球场和篮球场之间道路上的尽头，西边（那里原本是学校西门）紧邻着一片令人不寒而栗的黑暗。道路向东面延伸退回学校，另有一条小路在北面分岔到操场后面。",
-				usable: 	new AObject[0],
-				notClear: 	new[] { Playground, BasketballCourt },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在足球场和篮球场之间道路上的尽头，西边（那里原本是学校西门）紧邻着一片令人不寒而栗的黑暗。道路向东面延伸退回学校，另有一条小路在北面分岔到操场后面。",
+				usable: new AObject[0],
+				notClear: new[] { Playground, BasketballCourt },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.W, DarknessArea },
 							  { Direction.E, RdWGate } });
 
@@ -548,10 +546,10 @@ namespace Advent
 			doorW6.IsOpenable = false;
 			Campus.Objects.Add(doorW6);
 			SetupArea(ref W6, "篮球场边的道路",
-				desc: 		"你站在一条南北走向的道路上，西边围栏之外就是室外篮球场，东边面对体育馆[6#]侧面延伸到路边的楼梯。楼梯向上通往体育馆二楼；一楼没有侧门，只有几扇带防护栏的窗户。你也可以向东南拐到体育馆后面。",
-				usable: 	new[] { BasketballCourt, Building6, doorW6 },
-				notClear: 	new[] { Playground },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在一条南北走向的道路上，西边围栏之外就是室外篮球场，东边面对体育馆[6#]侧面延伸到路边的楼梯。楼梯向上通往体育馆二楼；一楼没有侧门，只有几扇带防护栏的窗户。你也可以向东南拐到体育馆后面。",
+				usable: new[] { BasketballCourt, Building6, doorW6 },
+				notClear: new[] { Playground },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.N, TriWGate },
 							  { Direction.SE, BkGym } });
 
@@ -564,18 +562,18 @@ namespace Advent
 				locked: true);
 			Campus.Objects.Add(doorBkGym);
 			SetupArea(ref BkGym, "体育馆后的空地",
-				desc: 		"你站在体育馆[6#]南边；这是种有树木的一块平地，东边是一座向北通向体育馆侧面池塘上的木板桥的入口，西北通向篮球场边的道路。你也可以向南，横穿过花坛走向空地靠近初中女生寝室楼[11#]附近的一边。",
-				usable: 	new[] { Building6, Flower, Building11, GymPond, doorBkGym },
-				notClear: 	new[] { BasketballCourt, Building10 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在体育馆[6#]南边；这是种有树木的一块平地，东边是一座向北通向体育馆侧面池塘上的木板桥的入口，西北通向篮球场边的道路。你也可以向南，横穿过花坛走向空地靠近初中女生寝室楼[11#]附近的一边。",
+				usable: new[] { Building6, Flower, Building11, GymPond, doorBkGym },
+				notClear: new[] { BasketballCourt, Building10 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.NW, W6 },
 							  { Direction.E, SE6Brg } });
 
 			SetupArea(ref SE6Brg, "木板桥上",
-				desc: 		"你站在一座体育馆边池塘的木板桥上，北边通往体育馆侧面附近的地面，南边通向初中女生寝室楼[11#]附近。你也可以往西去向体育馆南边的空地。",
-				usable: 	new[] { Building6, Flower, GymPond, Building11 },
-				notClear: 	new[] { Building9, Building10 },
-				godir: 		new Dictionary<Direction, Area>
+				desc: "你站在一座体育馆边池塘的木板桥上，北边通往体育馆侧面附近的地面，南边通向初中女生寝室楼[11#]附近。你也可以往西去向体育馆南边的空地。",
+				usable: new[] { Building6, Flower, GymPond, Building11 },
+				notClear: new[] { Building9, Building10 },
+				godir: new Dictionary<Direction, Area>
 							{ { Direction.N, EGym },
 							  { Direction.W, BkGym }});
 		}

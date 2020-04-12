@@ -73,6 +73,10 @@ namespace Advent
 		public Descriptor FullShortInfo { get; } = (s, v) =>
 		{
 			string ret = s.ShortInfo(s, v);
+			if (s.IsOpenable)
+			{
+				ret += s.OpenState ? "（开着）" : "（关着）";
+			}
 			if (s.IsContainer)
 			{
 				var so = s.SubObjects.Where(x => x.IsTakable);
@@ -82,7 +86,7 @@ namespace Advent
 					ret += "（里面什么也没有）";
 				else ret += "（你看不清楚里面装了什么）";
 			}
-			return ret;
+			return ret.Replace("）（", "，");
 		};
 
 		// door-likes
@@ -246,7 +250,7 @@ namespace Advent
 		public string LightDescription { get; set; }
 
 		// attributes
-		public bool IsLit { get; set; }
+		public bool IsLit { get; set; } = false;
 		public bool IsPlayerLit { get; set; } = false;
 		public bool IsWarm { get; set; } = true;
 		public AObject DefaultDoor { get; set; }
@@ -281,6 +285,17 @@ namespace Advent
 		public ObjHandler BeforeTurningOff	{ get; set; } = DefaultOHandler;
 		public ObjHandler PostTurningOff	{ get; set; } = DefaultOHandler;
 
+		private void FindSubObjectIn(AObject obj, string name, List<AObject> matches)
+		{
+			if (obj.IsOpenable && !obj.OpenState) return;
+			foreach (var subObj in obj.SubObjects)
+			{
+				if (subObj.Name == name || subObj.Alias.Contains(name))
+					matches.Add(subObj);
+				FindSubObjectIn(subObj, name, matches);
+			}
+		}
+
 		public AObject FindObject(string name, PlayerVariables v)
 		{
 			if (CurrentArea == null
@@ -292,11 +307,9 @@ namespace Advent
 				{
 					if (CurrentArea != null && CurrentArea.FilterObject(obj) == ObjectVisibility.NotVisible)
 						continue;
-					if ((obj.Name == name || obj.Alias.Contains(name)))
+					if (obj.Name == name || obj.Alias.Contains(name))
 						matches.Add(obj);
-					foreach (var subObj in obj.SubObjects)
-						if (subObj.Name == name || subObj.Alias.Contains(name))
-							matches.Add(subObj);
+					FindSubObjectIn(obj, name, matches);
 				}
 
 				if (matches.Count > 1)

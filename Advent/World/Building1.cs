@@ -34,13 +34,13 @@ namespace Advent
 				};
 				Building1F1.Objects.Add(doorNLobby);
 				SetupArea(ref NLobby, "大厅北侧",
-					desc:		"你站在一个空旷、昏暗的大厅中，北侧开阔的玻璃门外教学楼间的广场被暗紫色的天空微弱地照亮。两边通往大厅南侧的过道之间，是往上延伸的宽敞大理石楼梯。",
-					ldesc:		"空旷的大厅，在手电筒的光束下甚至显得更加空旷，你站在中间。北侧开阔的玻璃门外教学楼间的广场被暗紫色的天空微弱地照亮。两边通往大厅南侧的过道之间，是往上延伸的宽敞大理石台阶。",
-					usable:		new[] { doorNLobby },
-					notClear:	new AObject[0],
-					godir:		new Dictionary<Direction, Area>
+					desc: "你站在一个空旷、昏暗的大厅中，北侧开阔的玻璃门外教学楼间的广场被暗紫色的天空微弱地照亮。两边通往大厅南侧的过道之间，是往上延伸的宽敞大理石楼梯。",
+					ldesc: "空旷的大厅，在手电筒的光束下甚至显得更加空旷，你站在中间。北侧开阔的玻璃门外教学楼间的广场被暗紫色的天空微弱地照亮。两边通往大厅南侧的过道之间，是往上延伸的宽敞大理石台阶。",
+					usable: new[] { doorNLobby },
+					notClear: new AObject[0],
+					godir: new Dictionary<Direction, Area>
 								{ { Direction.S, SLobby } },
-					defDoor:	doorNLobby);
+					defDoor: doorNLobby);
 				NLobby.RoomTo.Add(Direction.Up, Building1F2);
 				NLobby.OnGoDirection = (self, v, d) =>
 				{
@@ -61,13 +61,13 @@ namespace Advent
 				};
 				Building1F1.Objects.Add(doorSLobby);
 				SetupArea(ref SLobby, "大厅南侧",
-					desc:		"你站在一个昏暗的大厅中，南侧开阔的玻璃门外，道路后面是寝室楼和树木的阴暗影子。两边通往大厅北侧的过道之间是一面有浮雕的墙。",
-					ldesc:		"大厅在手电筒的光束下显得既狭小又空旷；你站在中间。南侧开阔的玻璃门外，道路后面是寝室楼和树木的阴暗影子。两边通往大厅北侧的过道之间是一面有浮雕的墙。",
-					usable:		new[] { doorSLobby },
-					notClear:	new AObject[0],
-					godir:		new Dictionary<Direction, Area>
+					desc: "你站在一个昏暗的大厅中，南侧开阔的玻璃门外，道路后面是寝室楼和树木的阴暗影子。两边通往大厅北侧的过道之间是一面有浮雕的墙。",
+					ldesc: "大厅在手电筒的光束下显得既狭小又空旷；你站在中间。南侧开阔的玻璃门外，道路后面是寝室楼和树木的阴暗影子。两边通往大厅北侧的过道之间是一面有浮雕的墙。",
+					usable: new[] { doorSLobby },
+					notClear: new AObject[0],
+					godir: new Dictionary<Direction, Area>
 								{ { Direction.N, NLobby } },
-					defDoor:	doorSLobby);
+					defDoor: doorSLobby);
 
 			}
 
@@ -86,11 +86,11 @@ namespace Advent
 				Building1F2.Objects.Clear();
 
 				SetupArea(ref CStairs, "中央楼梯",
-					desc:		"你站在宽阔的大理石楼梯平台上；楼梯向上通往三楼，向下通往一楼。向南北方向绕过楼梯，是两边的过道；东西两面（西边是一块自习区域，东边堆着些活动用品）的空间被各层过道包围着向上通达楼顶。",
-					usable:		new AObject[] { },
-					notClear:	new AObject[0],
-					godir:		new Dictionary<Direction, Area>
-								{ });
+					desc: "你站在宽阔的大理石楼梯平台上；楼梯向上通往三楼，向下通往一楼。向南北方向绕过楼梯，是两边的过道；东西两面（西边是一块自习区域，东边堆着些活动用品）的空间被各层过道包围着向上通达楼顶。",
+					usable: new AObject[] { },
+					notClear: new AObject[0],
+					godir: new Dictionary<Direction, Area>
+					{ });
 				CStairs.RoomTo.Add(Direction.Down, Building1F1);
 				CStairs.RoomTo.Add(Direction.Up, Building1F3);
 				CStairs.OnGoDirection = (self, v, d) =>
@@ -114,11 +114,11 @@ namespace Advent
 				Building1F3.Objects.Clear();
 
 				SetupArea(ref CStairs, "中央楼梯",
-					desc:		"你站在宽阔的大理石楼梯平台上；楼梯向上通往四楼，向下通往二楼。向南北方向绕过楼梯，是两边的过道。",
-					usable:		new AObject[] { },
-					notClear:	new AObject[0],
-					godir:		new Dictionary<Direction, Area>
-								{ });
+					desc: "你站在宽阔的大理石楼梯平台上；楼梯向上通往四楼，向下通往二楼。向南北方向绕过楼梯，是两边的过道。",
+					usable: new AObject[] { },
+					notClear: new AObject[0],
+					godir: new Dictionary<Direction, Area>
+					{ });
 				CStairs.RoomTo.Add(Direction.Down, Building1F2);
 				CStairs.RoomTo.Add(Direction.Up, Building1F4);
 				CStairs.OnGoDirection = (self, v, d) =>
@@ -142,11 +142,11 @@ namespace Advent
 				Building1F4.Objects.Clear();
 
 				SetupArea(ref CStairs, "中央楼梯",
-					desc:		"你站在宽阔的大理石楼梯平台上；楼梯向上通往五楼，向下通往三楼。向南北方向绕过楼梯，是两边的过道。",
-					usable:		new AObject[] { },
-					notClear:	new AObject[0],
-					godir:		new Dictionary<Direction, Area>
-								{ });
+					desc: "你站在宽阔的大理石楼梯平台上；楼梯向上通往五楼，向下通往三楼。向南北方向绕过楼梯，是两边的过道。",
+					usable: new AObject[] { },
+					notClear: new AObject[0],
+					godir: new Dictionary<Direction, Area>
+					{ });
 				CStairs.RoomTo.Add(Direction.Down, Building1F3);
 				CStairs.RoomTo.Add(Direction.Up, Building1F5);
 				CStairs.OnGoDirection = (self, v, d) =>
@@ -170,11 +170,11 @@ namespace Advent
 				Building1F5.Objects.Clear();
 
 				SetupArea(ref CStairs, "中央楼梯",
-					desc:		"你站在宽阔的大理石楼梯平台上；楼梯向下通往四楼。向南北方向绕过楼梯，是两边的过道。",
-					usable:		new AObject[] { },
-					notClear:	new AObject[0],
-					godir:		new Dictionary<Direction, Area>
-								{ });
+					desc: "你站在宽阔的大理石楼梯平台上；楼梯向下通往四楼。向南北方向绕过楼梯，是两边的过道。",
+					usable: new AObject[] { },
+					notClear: new AObject[0],
+					godir: new Dictionary<Direction, Area>
+					{ });
 				CStairs.RoomTo.Add(Direction.Down, Building1F4);
 				CStairs.OnGoDirection = (self, v, d) =>
 				{
